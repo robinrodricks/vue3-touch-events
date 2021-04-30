@@ -1,4 +1,4 @@
-# vue-touch-events [![](https://img.shields.io/npm/v/vue3-touch-events.svg)](https://www.npmjs.com/package/vue3-touch-events)
+# vue3-touch-events [![](https://img.shields.io/npm/v/vue3-touch-events.svg)](https://www.npmjs.com/package/vue3-touch-events)
 
 Enable tap / swipe / touch / hold / mouse down / mouse up events for vue.js 3.x.
 
@@ -101,7 +101,7 @@ In your `.vue` file:
 >
 ```
 
-If you use vue and this plugin in UMD way (in a script tag) , this plugin is auto used. So it's not necessary to wirte `Vue.use(Vue2TouchEvents)`.
+If you use vue and this plugin in UMD way (in a script tag) , this plugin is auto used. So it's not necessary to wirte `Vue.use(Vue3TouchEvents)`.
 
 ```html
 <script src="path/to/vue.js"></script>
@@ -113,7 +113,7 @@ If you use vue and this plugin in UMD way (in a script tag) , this plugin is aut
 ### Global configuration (optional)
 
 ```js
-Vue.use(Vue2TouchEvents, {
+Vue.use(Vue3TouchEvents, {
   disableClick: false,
   touchClass: "",
   tapTolerance: 10,
