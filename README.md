@@ -1,37 +1,42 @@
-# vue-touch-events  [![](https://img.shields.io/npm/v/vue2-touch-events.svg)](https://www.npmjs.com/package/vue2-touch-events)
+# vue-touch-events [![](https://img.shields.io/npm/v/vue2-touch-events.svg)](https://www.npmjs.com/package/vue2-touch-events)
 
-Enable tap / swipe / touch hold events for vue.js 2.x
+Enable tap / swipe / touch / hold / mouse down / mouse up events for vue.js 3.x.
 
-> Note: This is for **vue.js 2.x** only.
+> Note: This is for **vue.js 3.x** only.
 
 Features:
 
-* Common touch events, such as `tap`, `swipe`, `touchhold` ([more](#Bindings))
-* All events support mouse and touch screen at same time
-* Optimized touch effects with `touchClass` option and `v-touch-class` directive
-* Binding multiple touch events on one DOM element
-* Customizable events with native-likely events handler
-* Allow splitting configurations for different DOM elements by `v-touch-options` directive
+- Common touch events, such as `tap`, `swipe`, `touchhold` ([more](#Bindings))
+- All events support mouse and touch screen at same time
+- Optimized touch effects with `touchClass` option and `v-touch-class` directive
+- Binding multiple touch events on one DOM element
+- Customizable events with native-likely events handler
+- Allow splitting configurations for different DOM elements by `v-touch-options` directive
+
+Credits:
+
+- All credits go to Jerry Bendy for creating the original project [vue2-touch-events](https://github.com/jerrybendy/vue-touch-events)
+- Special thanks to Xavier Julien for creating the [Vue 3.x port](https://github.com/XjulI1/vue-touch-events/tree/migrate-to-vuejs-3)
 
 ## Install
 
 To install with npm or yarn, use
 
 ```shell
-npm i -S vue2-touch-events
+npm i -S vue3-touch-events
 
 // or
 
-yarn add vue2-touch-events
+yarn add vue3-touch-events
 ```
 
 ## Usage
 
 ```js
-import Vue from 'vue'
-import Vue2TouchEvents from 'vue2-touch-events'
+import Vue from "vue";
+import Vue3TouchEvents from "vue3-touch-events";
 
-Vue.use(Vue2TouchEvents)
+Vue.use(Vue3TouchEvents);
 ```
 
 In your `.vue` file:
@@ -53,31 +58,47 @@ In your `.vue` file:
 <span v-touch:longtap="longtapHandler">Long Tap Event</span>
 
 <!-- bind a start and end event -->
-<span v-touch:start="startHandler" v-touch:end="endHandler">Down,start/Up,end Event</span>
+<span v-touch:start="startHandler" v-touch:end="endHandler"
+  >Down,start/Up,end Event</span
+>
 
 <!-- bind a move and moving event -->
-<span v-touch:moved="movedHandler">Triggered once when starting to move and tapTolerance is exceeded</span>
+<span v-touch:moved="movedHandler"
+  >Triggered once when starting to move and tapTolerance is exceeded</span
+>
 <span v-touch:moving="movingHandler">Continuously triggering Event</span>
 
 <!-- touch and hold -->
-<span v-touch:touchhold="touchHoldHandler">Touch and hold on the screen for a while</span>
+<span v-touch:touchhold="touchHoldHandler"
+  >Touch and hold on the screen for a while</span
+>
 
 <!-- you can even mix multiple events -->
-<span v-touch:tap="tapHandler"
-    v-touch:longtap="longtapHandler"
-    v-touch:swipe.left="swipeLeftHandler"
-    v-touch:start="startHandler" 
-    v-touch:end="endHandler"
-    v-touch:swipe.right="swipeRightHandler">Mix Multiple Events</span>
+<span
+  v-touch:tap="tapHandler"
+  v-touch:longtap="longtapHandler"
+  v-touch:swipe.left="swipeLeftHandler"
+  v-touch:start="startHandler"
+  v-touch:end="endHandler"
+  v-touch:swipe.right="swipeRightHandler"
+  >Mix Multiple Events</span
+>
 
 <!-- using different options for specified element -->
-<span v-touch:tap="tapHandler"
-    v-touch-options="{touchClass: 'active', swipeTolerance: 80, touchHoldTolerance: 300}">Different options</span>
+<span
+  v-touch:tap="tapHandler"
+  v-touch-options="{touchClass: 'active', swipeTolerance: 80, touchHoldTolerance: 300}"
+  >Different options</span
+>
 
 <!-- customize touch effects by CSS class -->
-<span v-touch:tap="tapHandler" v-touch-class="active">Customize touch class</span>
+<span v-touch:tap="tapHandler" v-touch-class="active"
+  >Customize touch class</span
+>
 <!-- or -->
-<span v-touch:tap="tapHandler" v-touch-options="{touchClass: 'active'}">Customize touch class</span>
+<span v-touch:tap="tapHandler" v-touch-options="{touchClass: 'active'}"
+  >Customize touch class</span
+>
 ```
 
 If you use vue and this plugin in UMD way (in a script tag) , this plugin is auto used. So it's not necessary to wirte `Vue.use(Vue2TouchEvents)`.
@@ -93,32 +114,32 @@ If you use vue and this plugin in UMD way (in a script tag) , this plugin is aut
 
 ```js
 Vue.use(Vue2TouchEvents, {
-    disableClick: false,
-    touchClass: '',
-    tapTolerance: 10,
-    touchHoldTolerance: 400,
-    swipeTolerance: 30,
-    longTapTimeInterval: 400
-})
+  disableClick: false,
+  touchClass: "",
+  tapTolerance: 10,
+  touchHoldTolerance: 400,
+  swipeTolerance: 30,
+  longTapTimeInterval: 400,
+});
 ```
 
-* `disableClick` default `false`. Use touch event only, will not trigger click event.
-  
-    You should keep this value default if you use your website on both mobile and PC.
-  
-    If your website uses on mobile only, it's a good choice to set this value to `true` to get a better user experience, and it can resolve some touch pass-through issue.
+- `disableClick` default `false`. Use touch event only, will not trigger click event.
 
-* `touchClass`  default: `''`. Add an extra CSS class when touch start, and remove it when touch end.
-  
-    This is a global config, and you can use `v-touch-class` directive to overwrite this setting in a single component.
+  You should keep this value default if you use your website on both mobile and PC.
 
-* `tapTolerance` default `10`. The tolerance to ensure whether the tap event effective or not.
+  If your website uses on mobile only, it's a good choice to set this value to `true` to get a better user experience, and it can resolve some touch pass-through issue.
 
-* `touchHoldTolerance` default `400` in millisecond. The timeout for a `touchhold` event.
+- `touchClass` default: `''`. Add an extra CSS class when touch start, and remove it when touch end.
 
-* `swipeTolerance` default `30`. The tolerance to ensure whether the swipe event effective or not.
+  This is a global config, and you can use `v-touch-class` directive to overwrite this setting in a single component.
 
-* `longTapTimeInterval` default `400` in millisecond. The minimum time interval to detect whether long tap event effective or not.
+- `tapTolerance` default `10`. The tolerance to ensure whether the tap event effective or not.
+
+- `touchHoldTolerance` default `400` in millisecond. The timeout for a `touchhold` event.
+
+- `swipeTolerance` default `30`. The tolerance to ensure whether the swipe event effective or not.
+
+- `longTapTimeInterval` default `400` in millisecond. The minimum time interval to detect whether long tap event effective or not.
 
 ### Directives
 
@@ -138,12 +159,12 @@ The first argument of the `v-swipe` callback is the direction of swipe event. It
 
 ```js
 export default {
-    methods: {
-        swipeHandler (direction) {
-            console.log(direction)  // May be left / right / top / bottom
-        }
-    }
-}
+  methods: {
+    swipeHandler(direction) {
+      console.log(direction); // May be left / right / top / bottom
+    },
+  },
+};
 ```
 
 ### v-touch-options `(v2.2.0)`
@@ -168,7 +189,8 @@ So that you can use this feature to instead of `:active` and `:hover` pseudo cla
 
 ```css
 /* before */
-span:active, span:hover {
+span:active,
+span:hover {
   background: green;
 }
 
@@ -186,7 +208,7 @@ span.active {
 
 #### v-touch:swipe
 
-`swipe` means touch on the screen and move in a direction. The direction could be `top`,`bottom`,`left` or `right`. 
+`swipe` means touch on the screen and move in a direction. The direction could be `top`,`bottom`,`left` or `right`.
 
 #### v-touch:longtap
 
@@ -200,9 +222,9 @@ span.active {
 
 #### v-touch:start / v-touch:end / v-touch:moving
 
-* `start` is same as `touchstart` or `mousedown`.
-* `end` is same as `touchend` or `mouseup`.
-* `moving` is same as `touchmovoe` or `mousemove`.
+- `start` is same as `touchstart` or `mousedown`.
+- `end` is same as `touchend` or `mouseup`.
+- `moving` is same as `touchmovoe` or `mousemove`.
 
 These three events are like native DOM events. You can use these events to custom behaviors which this library doesn't support yet.
 
@@ -243,14 +265,14 @@ a `function` and handle the extra parameters in the returned function.
 ```js
 export default {
   methods: {
-    myMethod (param) {
-      return function(direction, event) {
+    myMethod(param) {
+      return function (direction, event) {
         console.log(direction, param);
         // do something ~
-      }
-    }
-  }
-}
+      };
+    },
+  },
+};
 ```
 
 ## Change History

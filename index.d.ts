@@ -1,8 +1,8 @@
 import {PluginObject} from "vue";
 
-declare const Vue2TouchEvents: PluginObject<Vue2TouchEventsOptions>;
+declare const Vue3TouchEvents: PluginObject<Vue3TouchEventsOptions>;
 
-export interface Vue2TouchEventsOptions {
+export interface Vue3TouchEventsOptions {
   disableClick?: boolean;
   touchClass?: string;
   tapTolerance?: number;
@@ -10,4 +10,4 @@ export interface Vue2TouchEventsOptions {
   longTapTimeInterval?: number;
 }
 
-export default Vue2TouchEvents;
+export default Vue3TouchEvents;
