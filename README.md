@@ -1,4 +1,4 @@
-# vue-touch-events [![](https://img.shields.io/npm/v/vue2-touch-events.svg)](https://www.npmjs.com/package/vue2-touch-events)
+# vue-touch-events [![](https://img.shields.io/npm/v/vue3-touch-events.svg)](https://www.npmjs.com/package/vue3-touch-events)
 
 Enable tap / swipe / touch / hold / mouse down / mouse up events for vue.js 3.x.
 
