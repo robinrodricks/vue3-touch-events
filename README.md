@@ -156,6 +156,8 @@ methods: {
 
 List of all supported events are given below.
 
+**All events work on Desktop & Mobile devices.**
+
 | <div style="width:170px">Event</div>                      | Behaviour                                                |
 | ---------------------------- | ----------------------------------------------------- |
 |  `v-touch`<br> `v-touch:tap` | **Desktop:** Triggered when the user clicks on the element (press and release). <br> **Mobile:** Triggered when the user taps on the element (tap and release)      |
