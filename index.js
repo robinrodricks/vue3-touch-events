@@ -34,13 +34,16 @@ var isPassiveSupported = (function() {
 
 var vueTouchEvents = {
     install: function (app, constructorOptions) {
+		
         var globalOptions = Object.assign({}, {
             disableClick: false,
             tapTolerance: 10,  // px
             swipeTolerance: 30,  // px
             touchHoldTolerance: 400,  // ms
             longTapTimeInterval: 400,  // ms
-            touchClass: ''
+            touchClass: '',
+			dragFrequency: 100, // ms
+			rollOverFrequency: 100, // ms
         }, constructorOptions);
 
         function touchStartEvent(event) {
@@ -75,13 +78,22 @@ var vueTouchEvents = {
             $this.currentY = 0;
 
             $this.touchStartTime = event.timeStamp;
+			
+			// performance: only process swipe events if `swipe.*` event is registered on this element
+			$this.hasSwipe = hasEvent(this, 'swipe')
+				|| hasEvent(this, 'swipe.left') || hasEvent(this, 'swipe.right')
+				|| hasEvent(this, 'swipe.top') || hasEvent(this, 'swipe.bottom');
 
-            // Trigger touchhold event after `touchHoldTolerance`ms
-            $this.touchHoldTimer = setTimeout(function() {
-                $this.touchHoldTimer = null;
-                triggerEvent(event, $el, 'hold');
-            }, $this.options.touchHoldTolerance);
-
+			// performance: only start hold timer if the `hold` event is registered on this element
+			if (hasEvent(this, 'hold')){
+				
+				// Trigger touchhold event after `touchHoldTolerance` MS
+				$this.touchHoldTimer = setTimeout(function() {
+					$this.touchHoldTimer = null;
+					triggerEvent(event, $el, 'hold');
+				}, $this.options.touchHoldTolerance);
+			}
+			
             triggerEvent(event, this, 'press');
         }
 
@@ -102,20 +114,45 @@ var vueTouchEvents = {
                 $this.touchMoved = Math.abs($this.startX - $this.currentX) > tapTolerance ||
 								   Math.abs($this.startY - $this.currentY) > tapTolerance;
 
+				// trigger `drag.once` only once after mouse FIRST moved while dragging the element
+				// (`touchMoved` is the flag that indicates we no longer need to trigger this)
                 if($this.touchMoved){
                     cancelTouchHoldTimer($this);
                     triggerEvent(event, this, 'drag.once');
                 }
 
-            } else if (!$this.swipeOutBounded) {
-                var swipeOutBounded = $this.options.swipeTolerance;
+			// performance: only process swipe events if `swipe.*` event is registered on this element
+            } else if ($this.hasSwipe && !$this.swipeOutBounded) {
+				var swipeOutBounded = $this.options.swipeTolerance;
 
-                $this.swipeOutBounded = Math.abs($this.startX - $this.currentX) > swipeOutBounded &&
-                    Math.abs($this.startY - $this.currentY) > swipeOutBounded;
+				$this.swipeOutBounded = Math.abs($this.startX - $this.currentX) > swipeOutBounded &&
+					Math.abs($this.startY - $this.currentY) > swipeOutBounded;
             }
 
-            if($this.touchStarted && $this.touchMoved && movedAgain){
-                triggerEvent(event, this, 'drag');
+			// only trigger `rollover` event if cursor actually moved over this element
+            if(hasEvent(this, 'rollover') && movedAgain){
+				
+				// throttle the `rollover` event based on `rollOverFrequency`
+				var now = event.timeStamp;
+				var throttle = $this.options.rollOverFrequency;
+				if ($this.touchRollTime == null || now > ($this.touchRollTime + throttle)){
+					$this.touchRollTime = now;
+					
+					triggerEvent(event, this, 'rollover');
+				}
+            }
+
+			// only trigger `drag` event if cursor actually moved and if we are still dragging this element
+            if(hasEvent(this, 'drag') && $this.touchStarted && $this.touchMoved && movedAgain){
+				
+				// throttle the `drag` event based on `dragFrequency`
+				var now = event.timeStamp;
+				var throttle = $this.options.dragFrequency;
+				if ($this.touchDragTime == null || now > ($this.touchDragTime + throttle)){
+					$this.touchDragTime = now;
+					
+					triggerEvent(event, this, 'drag');
+				}
             }
         }
 
@@ -149,18 +186,18 @@ var vueTouchEvents = {
                 return;
             }
 
-            // Fix #33, Trigger `end` event when touch stopped
+            // trigger `end` event when touch stopped
             triggerEvent(event, this, 'release');
 
             if (!$this.touchMoved) {
                 // detect if this is a longTap event or not
-                if ($this.callbacks.longtap && event.timeStamp - $this.touchStartTime > $this.options.longTapTimeInterval) {
+                if (hasEvent(this, 'longtap') && event.timeStamp - $this.touchStartTime > $this.options.longTapTimeInterval) {
                     if (event.cancelable) {
                         event.preventDefault();
                     }
                     triggerEvent(event, this, 'longtap');
 
-                } else if ($this.callbacks.hold && touchholdEnd) {
+                } else if (hasEvent(this, 'hold') && touchholdEnd) {
                     if (event.cancelable) {
                         event.preventDefault();
                     }
@@ -170,7 +207,8 @@ var vueTouchEvents = {
                     triggerEvent(event, this, 'tap');
                 }
 
-            } else if (!$this.swipeOutBounded) {
+			// performance: only process swipe events if `swipe.*` event is registered on this element
+            } else if ($this.hasSwipe && !$this.swipeOutBounded) {
                 var swipeOutBounded = $this.options.swipeTolerance,
                     direction,
                     distanceY = Math.abs($this.startY - $this.currentY),
@@ -184,7 +222,7 @@ var vueTouchEvents = {
                     }
 
                     // Only emit the specified event when it has modifiers
-                    if ($this.callbacks['swipe.' + direction]) {
+                    if (hasEvent(this, 'swipe.' + direction)) {
                         triggerEvent(event, this, 'swipe.' + direction, direction);
                     } else {
                         // Emit a common event when it has no any modifier
@@ -202,15 +240,23 @@ var vueTouchEvents = {
             removeTouchClass(this);
         }
 
+        function hasEvent($el, eventType) {
+            var callbacks = $el.$$touchObj.callbacks[eventType];
+			return (callbacks != null && callbacks.length > 0);
+		}
+		
         function triggerEvent(e, $el, eventType, param) {
             var $this = $el.$$touchObj;
 
-            // get the callback list
-            var callbacks = $this.callbacks[eventType] || null;
+            // get the subscribers for this event
+            var callbacks = $this.callbacks[eventType];
+			
+			// exit if no subscribers to this particular event
             if (callbacks == null || callbacks.length === 0) {
                 return null;
             }
 
+			// per callback
             for (var i = 0; i < callbacks.length; i++) {
                 var binding = callbacks[i];
 

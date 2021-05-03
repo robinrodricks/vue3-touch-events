@@ -13,6 +13,7 @@ Features:
 - Automatically add styling on hover and tap using `v-touch-class` directive
 - Bind multiple touch events on one DOM element
 - Customizable events with native-like events handler
+- Throttling for `drag` and `rollover` events to prevent crashing your application
 - Global configuration that applies to all events in the application
 - Ability to override global configuration on any element using `v-touch-options` directive
 - Bindings for TypeScript included and also works in pure-JavaScript projects
@@ -167,8 +168,9 @@ List of all supported events are given below.
 | `v-touch:hold`              | Triggered when the user holds the mouse button down for `touchHoldTolerance` MS while over the element (press and hold). <br> This will be triggered before your finger is released, similar to what native mobile apps do.    |
 | `v-touch:press`              | **Desktop:** Triggered when the user presses the element (mouse down). <br> **Mobile:** Triggered when the user taps the element without releasing.    |
 | `v-touch:drag.once`              | Triggered when the user presses and drags the element. <br> Only fired once, the moment the user first drags on the element.   |
-| `v-touch:drag`             | Triggered when the user presses and drags the element. <br> Fired every time the mouse moves while dragging the element.   |
+| `v-touch:drag`             | Triggered when the user presses and drags the element. <br> Fired every time the mouse moves while dragging the element.  <br> This event is throttled to prevent too many events per second. <br>  This event will fire every `dragFrequency` MS.   |
 | `v-touch:release`                | **Desktop:** Triggered when the user releases the element (mouse up). <br> **Mobile:** Triggered when the user taps and releases the element.  |
+| `v-touch:rollover`                | **Desktop only:** Triggered when the user moves his mouse over the element. <br> This event is throttled to prevent too many events per second. <br> This event will fire every `rollOverFrequency` MS.  |
 
 
 
@@ -183,6 +185,30 @@ Some events have been renamed from the vue 2.x version of this library, in order
 | `v-touch:end`                | `v-touch:release`   |
 | `v-touch:moved`              | `v-touch:drag.once` |
 | `v-touch:moving`             | `v-touch:drag`      |
+
+
+
+### System events
+
+These are the default interactivity events supported by vue.js 3.x.
+
+* You do not need to install this library to use them.
+* They are always available for your usage alongside this library.
+* The system default `mousemove` event is similar to `v-touch:rollover`, however the system event is not throttled and it will trigger hundreds of times per second, potentially crashing your application if any logic is performed in the event handler
+
+**[Desktop devices](https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent):**
+- `v-on:click` - Triggered when the user presses and releases the element.
+- `v-on:mousedown` - Triggered when the user presses the element.
+- `v-on:mousemove` - Triggered when the user moves the mouse over the element.
+- `v-on:mouseup` - Triggered when the user presses and releases the element.
+- `v-on:mouseenter` - Triggered when the user moves his mouse into the element.
+- `v-on:mouseleave` - Triggered when the user moves his mouse away from the element.
+
+**[Mobile devices](https://developer.mozilla.org/en-US/docs/Web/API/Touch_events):**
+- `v-on:touchstart` - Triggered when the user presses the element.
+- `v-on:touchmove` - Triggered when the user presses and drags over the element.
+- `v-on:touchcancel` - Triggered when the user presses the element, and releases outside the element, thereby cancelling his tap.
+- `v-on:touchend` - Triggered when the user taps the element (press and release).
 
 
 
@@ -262,12 +288,7 @@ span.active {
 
 ```js
 Vue.use(Vue3TouchEvents, {
-	disableClick: false,
-	touchClass: "",
-	tapTolerance: 10,
-	touchHoldTolerance: 400,
-	swipeTolerance: 30,
-	longTapTimeInterval: 400,
+	disableClick: false, ...
 });
 ```
 
@@ -288,4 +309,8 @@ Vue.use(Vue3TouchEvents, {
 - `swipeTolerance` in pixels - How many pixels the user must drag on the element for it to register as a `swipe` event. **Default:**  `30` pixels.
 
 - `longTapTimeInterval` in milliseconds - The minimum time interval to detect whether long tap event effective or not.  **Default:**  `400` MS.
+
+- `dragFrequency` in milliseconds - How often should `drag` events be fired.  **Default:**  `100` MS (10 times a second).
+
+- `rollOverFrequency` in milliseconds - How often should `rollover` events be fired.  **Default:**  `100` MS (10 times a second).
 
