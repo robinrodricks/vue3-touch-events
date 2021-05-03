@@ -126,7 +126,7 @@ If you simply want to execute a callback function on a `v-touch` event, use this
 
 ```js
 methods: {
-	onTapItem() {
+	onTapItem(mouseEvent) { // you can remove the `mouseEvent` argument
 		console.log("Tapped!");
 	},
 },
@@ -145,7 +145,7 @@ If you want to add extra parameters to your `v-touch` event handler, you need to
 ```js
 methods: {
 	onSwipeItem(item, i) {
-		return function (direction, event) {
+		return function (direction, mouseEvent) {
 			console.log("Swiped item ", i, ": ", item, " in direction ", direction);
 		};
 	},
