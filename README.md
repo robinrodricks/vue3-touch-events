@@ -2,7 +2,7 @@
 
 **Enable tap, swipe, touch, hold, mouse down, mouse up events on any HTML DOM Element in vue.js 3.x.**
 
-The easiest way to make your interactive vue.js content mobile-friendly. When you add `v-touch` events to your elements, it works on desktop and mobile using a fully declarative syntax. Unlike other libraries, you do not need to add any special code to your components to make this work. You simply have to register the library globally and it takes event throughout your application.
+The easiest way to make your interactive vue.js content mobile-friendly. When you add `v-touch` events to your elements, it works on desktop and mobile using a fully declarative syntax. Unlike other libraries, you do not need to add any special code to your components to make this work. You simply have to register the library globally and it enables new events throughout your application.
 
 Released under the permissive MIT License.
 
@@ -26,7 +26,10 @@ Credits:
 - All credits go to Jerry Bendy for creating the original project [vue2-touch-events](https://github.com/jerrybendy/vue-touch-events)
 - Special thanks to Xavier Julien for creating the [Vue 3.x port](https://github.com/XjulI1/vue-touch-events/tree/migrate-to-vuejs-3)
 
-## Install
+
+
+
+## Installation
 
 To install with npm:
 
@@ -39,8 +42,6 @@ To install with yarn:
 ```shell
 yarn add vue3-touch-events
 ```
-
-## Setup
 
 ### TypeScript
 
@@ -62,7 +63,9 @@ You need to include the [UMD script](https://raw.githubusercontent.com/robinrodr
 <script src="libs/vue3-touch-events.js"></script>
 ```
 
-## Usage
+
+
+## Examples
 
 In your `.vue` component files, use the `v-touch` directive add touch events to elements.
 
@@ -79,23 +82,23 @@ Specify the event using the first argument, for example `v-touch:tap` or `v-touc
 <span v-touch:swipe="swipeHandler">Swipe Here</span>
 
 <!-- only when swipe left can trigger the callback -->
-<span v-touch:swipe.left="swipeHandler">Swipe Here</span>
+<span v-touch:swipe.left="swipeHandler">Swipe Left Here</span>
 
 <!-- bind a long tap event -->
 <span v-touch:longtap="longtapHandler">Long Tap Event</span>
 
 <!-- bind a start and end event -->
-<span v-touch:start="startHandler" v-touch:end="endHandler">Down,start/Up,end Event</span>
+<span v-touch:press="startHandler" v-touch:release="endHandler">Press and Release Events</span>
 
 <!-- bind a move and moving event -->
-<span v-touch:moved="movedHandler">Triggered once when starting to move and tapTolerance is exceeded</span>
-<span v-touch:moving="movingHandler">Continuously triggering Event</span>
+<span v-touch:drag.once="movedHandler">Triggered once when starting to move and tapTolerance is exceeded</span>
+<span v-touch:drag="movingHandler">Continuously triggered while dragging</span>
 
 <!-- touch and hold -->
-<span v-touch:touchhold="touchHoldHandler">Touch and hold on the screen for a while</span>
+<span v-touch:hold="touchHoldHandler">Touch and hold on the screen for a while</span>
 
 <!-- you can even mix multiple events -->
-<span v-touch:tap="tapHandler" v-touch:longtap="longtapHandler" v-touch:swipe.left="swipeLeftHandler" v-touch:start="startHandler" v-touch:end="endHandler" v-touch:swipe.right="swipeRightHandler">Mix Multiple Events</span>
+<span v-touch:tap="tapHandler" v-touch:longtap="longtapHandler" v-touch:swipe.left="swipeLeftHandler" v-touch:press="startHandler" v-touch:release="endHandler" v-touch:swipe.right="swipeRightHandler">Mix Multiple Events</span>
 
 <!-- using different options for specified element -->
 <span v-touch:tap="tapHandler" v-touch-options="{touchClass: 'active', swipeTolerance: 80, touchHoldTolerance: 300}">Different options</span>
@@ -106,18 +109,80 @@ Specify the event using the first argument, for example `v-touch:tap` or `v-touc
 <span v-touch:tap="tapHandler" v-touch-options="{touchClass: 'active'}">Customize touch class</span>
 ```
 
+
+
+## Usage
+
+### Simple callback
+
+If you simply want to execute a callback function on a `v-touch` event, use this pattern:
+
+```html
+<div v-touch:tap="onTapItem">Button</div>
+```
+
+```js
+methods: {
+	onTapItem() {
+		console.log("Tapped!");
+	},
+},
+```
+
+### Passing parameters to the event handler
+
+If you want to add extra parameters to your `v-touch` event handler, you need to return a delegate in the event handler. You can pass as many attributes as you need.
+
+```html
+<div v-for="(item, i) in items">
+	<div v-touch:swipe="onSwipeItem(item, i)">Button</div>
+</div>
+```
+
+```js
+methods: {
+	onSwipeItem(item, i) {
+		return function (direction, event) {
+			console.log("Swiped item ", i, ": ", item, " in direction ", direction);
+		};
+	},
+},
+```
+
+
+
+
 ## Events
 
 List of all supported events are given below.
 
-| Event                                                              | Behaviour                                                                                                                                                                                                                                                                                                                     | Example Callback            |
-| ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `v-touch:tap` <br> `v-touch`                                       | Triggered when user clicks/taps on the element (press and release).                                                                                                                                                                                                                                                           | `onTap(){ ... }`            |
-| `v-touch:swipe`                                                    | Triggered when user drags on the element (swipe). <br> It will detect the direction of the swipe, based on the 4 cardinal directions and send it to your callback. <br> First argument of callback will be `direction`, which can be `left`, `right`, `top` or `bottom`. <br> You can bind events only for specify direction. | `onSwipe(direction){ ... }` |
-| `v-touch:touchhold`                                                | Triggered when user holds the mouse button down for `touchHoldTolerance` milliseconds while over the element (press and hold). <br> This will be triggered before your finger is released, similar to what native mobile apps do.                                                                                             | `onHold(){ ... }`           |
-| `v-touch:start` <br> `v-touch:touchstart` <br> `v-touch:mousedown` | **Desktop:** Triggered when the user presses the element (mouse down). <br> **Mobile:** Triggered when the user taps the element without releasing.                                                                                                                                                                           | `onMouseDown(){ ... }`      |
-| `v-touch:moving` <br> `v-touch:touchmove` <br> `v-touch:mousemove` | **Desktop only:** Triggered when user moves the mouse while over the element.                                                                                                                                                                                                                                                 | `onMouseMove(){ ... }`      |
-| `v-touch:end` <br> `v-touch:touchend` <br> `v-touch:mouseup`       | **Desktop:** Triggered when the user releases the element (mouse up). <br> **Mobile:** Triggered when the user taps and releases the element.                                                                                                                                                                                 | `onMouseUp(){ ... }`        |
+| <div style="width:170px">Event</div>                      | Behaviour                                                |
+| ---------------------------- | ----------------------------------------------------- |
+|  `v-touch`<br> `v-touch:tap` | **Desktop:** Triggered when the user clicks on the element (press and release). <br> **Mobile:** Triggered when the user taps on the element (tap and release)      |
+| `v-touch:longtap` | **Desktop:** Triggered when the user holds on the element for `longTapTimeInterval` MS and then releases it (press and release). <br> **Mobile:** Triggered when the user taps and holds on the element for `longTapTimeInterval` MS and then releases it (tap and release)      |
+| `v-touch:swipe`              | Triggered when the user drags on the element (swipe). <br> It will detect the direction of the swipe and send it to your callback. <br> First argument of the callback must be `direction` attribute, which can be `left`, `right`, `top` or `bottom`. <br> Example callback: `onSwipe(direction){ ... }` |
+| `v-touch:swipe.left` <br>`v-touch:swipe.right` <br>`v-touch:swipe.top` <br>`v-touch:swipe.bottom` <br> | Triggered when the user drags on the element in a specific direction (directional swipe).
+| `v-touch:hold`              | Triggered when the user holds the mouse button down for `touchHoldTolerance` MS while over the element (press and hold). <br> This will be triggered before your finger is released, similar to what native mobile apps do.    |
+| `v-touch:press`              | **Desktop:** Triggered when the user presses the element (mouse down). <br> **Mobile:** Triggered when the user taps the element without releasing.    |
+| `v-touch:drag.once`              | Triggered when the user presses and drags the element. <br> Only fired once, the moment the user first drags on the element.   |
+| `v-touch:drag`             | Triggered when the user presses and drags the element. <br> Fired every time the mouse moves while dragging the element.   |
+| `v-touch:release`                | **Desktop:** Triggered when the user releases the element (mouse up). <br> **Mobile:** Triggered when the user taps and releases the element.  |
+
+
+
+### Migration from Vue 2.x
+
+Some events have been renamed from the vue 2.x version of this library, in order to expose a cleaner, more consistant and more descriptive naming scheme.
+
+| Old event name               | New event name      |
+| ---------------------------- | ------------------- |
+| `v-touch:touchhold`          | `v-touch:hold`      |
+| `v-touch:start`              | `v-touch:press`     |
+| `v-touch:end`                | `v-touch:release`   |
+| `v-touch:moved`              | `v-touch:drag.once` |
+| `v-touch:moving`             | `v-touch:drag`      |
+
+
 
 ## Options
 
@@ -133,7 +198,7 @@ These additional directives can be added to each element.
 
 - By default the `touchClass` is added when the element is pressed (`mousedown`), and removed when the element is released (`mouseup`).
 - If desktop events are enabled (`disableClick: false`), then the `touchClass` is added on roll over (`mouseenter`) and roll out (`mouseleave`) as well.
-- You can use this instead of `:active` and `:hover` pseudo classes, as they work on desktop and mobile
+- You can use this instead of `:active` and `:hover` pseudo classes, as it works on both desktop and mobile
 
 Behaviour:
 
@@ -148,23 +213,23 @@ Behaviour:
 		<td rowspan="2">Desktop only</td>
 		<td>Mouse enter (roll over)</td>
 		<td>`touchClass` added</td>
-		<td>desktop events enabled</td>
+		<td>desktop events must be enabled</td>
 	</tr>
 	<tr>
 		<td>Mouse leave (roll out)</td>
 		<td>`touchClass` removed</td>
-		<td>desktop events enabled</td>
+		<td>desktop events must be enabled</td>
 	</tr>
 	<tr>
 		<td rowspan="2">Mobile only</td>
 		<td>Mouse down (press)</td>
 		<td>`touchClass` added</td>
-		<td>always triggered</td>
+		<td></td>
 	</tr>
 	<tr>
 		<td>Mouse up (release)</td>
 		<td>`touchClass` removed</td>
-		<td>always triggered</td>
+		<td></td>
 	</tr>
 </table>
 
@@ -204,45 +269,21 @@ Vue.use(Vue3TouchEvents, {
 });
 ```
 
-- `disableClick` default `false`. Use touch event only, will not trigger click event.
+- `disableClick` - Whether to disable desktop events. **Default:** `false`.
 
-  You should keep this value default if you use your website on both mobile and PC.
+  Keep the default value or `false` if your application is used on desktop and mobile devices.
 
-  If your website uses on mobile only, it's a good choice to set this value to `true` to get a better user experience, and it can resolve some touch pass-through issue.
+  If your application is only for mobile use, set this to `true` to get a better user experience, because it can resolve some touch pass-through issues encountered on mobile devices.
 
-- `touchClass` default: `''`. Add an extra CSS class when touch start, and remove it when touch end.
+- `touchClass` - Which CSS class to add while an element is rolled over (desktop) or tapped (mobile). **Default:** `''`
 
-  This is a global config, and you can use `v-touch-class` directive to overwrite this setting in a single component.
+  This is a global config, and you can use `v-touch-class` directive to override this setting for a single element.
 
-- `tapTolerance` default `10`. The tolerance to ensure whether the tap event effective or not.
+- `tapTolerance` in pixels - How many pixels the user must drag on the element for it to register as a `tap` event. **Default:** `10` pixels.
 
-- `touchHoldTolerance` default `400` in millisecond. The timeout for a `touchhold` event.
+- `touchHoldTolerance` in milliseconds - The timeout for a `touchhold` event. **Default:**  `400` MS
 
-- `swipeTolerance` default `30`. The tolerance to ensure whether the swipe event effective or not.
+- `swipeTolerance` in pixels - How many pixels the user must drag on the element for it to register as a `swipe` event. **Default:**  `30` pixels.
 
-- `longTapTimeInterval` default `400` in millisecond. The minimum time interval to detect whether long tap event effective or not.
+- `longTapTimeInterval` in milliseconds - The minimum time interval to detect whether long tap event effective or not.  **Default:**  `400` MS.
 
-## FAQs
-
-### How to add extra parameters
-
-As mentioned by [#3](https://github.com/jerrybendy/vue-touch-events/issues/3), if you want to add extra
-parameters for `v-touch`, you can't do that like `v-on`. The hack is that you can let your method returns
-a `function` and handle the extra parameters in the returned function.
-
-```html
-<div v-touch:swipe="myMethod('myOtherParam')">Swipe</div>
-```
-
-```js
-export default {
-	methods: {
-		myMethod(param) {
-			return function (direction, event) {
-				console.log(direction, param);
-				// do something ~
-			};
-		},
-	},
-};
-```
