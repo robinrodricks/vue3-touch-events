@@ -4,6 +4,8 @@
 
 The easiest way to make your interactive vue.js content mobile-friendly. When you add `v-touch` events to your elements, it works on desktop and mobile using a fully declarative syntax. Unlike other libraries, you do not need to add any special code to your components to make this work. You simply have to register the library globally and it enables new events throughout your application.
 
+![Events](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/animation.gif)
+
 Released under the permissive MIT License.
 
 Features:
