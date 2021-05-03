@@ -63,15 +63,15 @@ var vueTouchEvents = {
 
             addTouchClass(this);
 
-            $this.touchStarted = true;
+            $this.touchStarted = true; // always true while the element is being PRESSED
 
-            $this.touchMoved = false;
+            $this.touchMoved = false; // true only when the element is PRESSED and DRAGGED a bit
             $this.swipeOutBounded = false;
 
             $this.startX = touchX(event);
             $this.startY = touchY(event);
 
-            $this.currentX = 0;
+            $this.currentX = 0; // always updated with the last mouse X/Y while over the element
             $this.currentY = 0;
 
             $this.touchStartTime = event.timeStamp;
@@ -79,27 +79,32 @@ var vueTouchEvents = {
             // Trigger touchhold event after `touchHoldTolerance`ms
             $this.touchHoldTimer = setTimeout(function() {
                 $this.touchHoldTimer = null;
-                triggerEvent(event, $el, 'touchhold');
+                triggerEvent(event, $el, 'hold');
             }, $this.options.touchHoldTolerance);
 
-            triggerEvent(event, this, 'start');
+            triggerEvent(event, this, 'press');
         }
 
         function touchMoveEvent(event) {
             var $this = this.$$touchObj;
+			
+			var curX = touchX(event);
+			var curY = touchY(event);
 
-            $this.currentX = touchX(event);
-            $this.currentY = touchY(event);
+			var movedAgain = ($this.currentX != curX) || ($this.currentY != curY);
+			
+            $this.currentX = curX;
+            $this.currentY = curY;
 
             if (!$this.touchMoved) {
                 var tapTolerance = $this.options.tapTolerance;
 
                 $this.touchMoved = Math.abs($this.startX - $this.currentX) > tapTolerance ||
-                    Math.abs($this.startY - $this.currentY) > tapTolerance;
+								   Math.abs($this.startY - $this.currentY) > tapTolerance;
 
                 if($this.touchMoved){
                     cancelTouchHoldTimer($this);
-                    triggerEvent(event, this, 'moved');
+                    triggerEvent(event, this, 'drag.once');
                 }
 
             } else if (!$this.swipeOutBounded) {
@@ -109,8 +114,8 @@ var vueTouchEvents = {
                     Math.abs($this.startY - $this.currentY) > swipeOutBounded;
             }
 
-            if($this.touchMoved){
-                triggerEvent(event, this, 'moving');
+            if($this.touchStarted && $this.touchMoved && movedAgain){
+                triggerEvent(event, this, 'drag');
             }
         }
 
@@ -145,7 +150,7 @@ var vueTouchEvents = {
             }
 
             // Fix #33, Trigger `end` event when touch stopped
-            triggerEvent(event, this, 'end');
+            triggerEvent(event, this, 'release');
 
             if (!$this.touchMoved) {
                 // detect if this is a longTap event or not
@@ -155,7 +160,7 @@ var vueTouchEvents = {
                     }
                     triggerEvent(event, this, 'longtap');
 
-                } else if ($this.callbacks.touchhold && touchholdEnd) {
+                } else if ($this.callbacks.hold && touchholdEnd) {
                     if (event.cancelable) {
                         event.preventDefault();
                     }
@@ -201,8 +206,8 @@ var vueTouchEvents = {
             var $this = $el.$$touchObj;
 
             // get the callback list
-            var callbacks = $this.callbacks[eventType] || [];
-            if (callbacks.length === 0) {
+            var callbacks = $this.callbacks[eventType] || null;
+            if (callbacks == null || callbacks.length === 0) {
                 return null;
             }
 
@@ -291,10 +296,10 @@ var vueTouchEvents = {
                         }
                         break;
 
-                    case 'start':
-                    case 'moving':
+                    case 'press':
+                    case 'drag':
                         if (binding.modifiers.disablePassive) {
-                            // change the passive option for the moving event if disablePassive modifier exists
+                            // change the passive option for the `drag` event if disablePassive modifier exists
                             passiveOpt = false;
                         }
                     default:
