@@ -10,7 +10,7 @@ Released under the permissive MIT License.
 
 Features:
 
-- Declarative syntax for common touch events, such as `tap`, `swipe`, `touchhold` ([more](#Events))
+- Declarative syntax for common touch events, such as `tap`, `swipe`, `hold`, `drag` and [more](#Events)
 - All events support desktop (mouse) and mobile devices (touch screen) with the same syntax
 - Automatically add styling on hover and tap using `v-touch-class` directive
 - Bind multiple touch events on one DOM element
@@ -306,7 +306,7 @@ Vue.use(Vue3TouchEvents, {
 
 - `tapTolerance` in pixels - How many pixels the user must drag on the element for it to register as a `tap` event. **Default:** `10` pixels.
 
-- `touchHoldTolerance` in milliseconds - The timeout for a `touchhold` event. **Default:**  `400` MS
+- `touchHoldTolerance` in milliseconds - The timeout for a `hold` event. **Default:**  `400` MS
 
 - `swipeTolerance` in pixels - How many pixels the user must drag on the element for it to register as a `swipe` event. **Default:**  `30` pixels.
 
