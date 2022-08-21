@@ -413,4 +413,5 @@ var vueTouchEvents = {
 /*
  * Exports
  */
-export default vueTouchEvents
+
+module.exports = { vueTouchEvents }
