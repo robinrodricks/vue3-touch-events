@@ -4,6 +4,7 @@
   "description": "Simple touch events support for vue.js 3",
   "main": "index.js",
   "types": "index.d.ts",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
