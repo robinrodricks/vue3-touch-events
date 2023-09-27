@@ -1,4 +1,4 @@
-import { Plugin } from "vue";
+import {Plugin} from "vue";
 
 declare const Vue3TouchEvents: Plugin<Vue3TouchEventsOptions & undefined>;
 
