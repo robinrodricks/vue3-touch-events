@@ -215,7 +215,7 @@ var vueTouchEvents = {
                     distanceX = Math.abs($this.startX - $this.currentX);
 
                 if (distanceY > swipeOutBounded || distanceX > swipeOutBounded) {
-                    if (distanceY > swipeOutBounded) {
+                    if (distanceY > distanceX) {
                         direction = $this.startY > $this.currentY ? 'top' : 'bottom';
                     } else {
                         direction = $this.startX > $this.currentX ? 'left' : 'right';
