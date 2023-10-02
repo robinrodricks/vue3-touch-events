@@ -376,6 +376,8 @@ var vueTouchEvents = {
             },
 
             unmounted: function ($el) {
+                cancelTouchHoldTimer($el.$$touchObj)
+
                 $el.removeEventListener('touchstart', touchStartEvent);
                 $el.removeEventListener('touchmove', touchMoveEvent);
                 $el.removeEventListener('touchcancel', touchCancelEvent);
