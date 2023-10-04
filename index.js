@@ -294,7 +294,7 @@ var vueTouchEvents = {
         }
 
         function cancelTouchHoldTimer($this) {
-            if ($this.touchHoldTimer) {
+            if ($this && $this.touchHoldTimer) {
                 clearTimeout($this.touchHoldTimer);
                 $this.touchHoldTimer = null;
             }
