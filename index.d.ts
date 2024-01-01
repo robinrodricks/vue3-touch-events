@@ -1,6 +1,6 @@
 import {Plugin} from "vue";
 
-declare const Vue3TouchEvents: Plugin<Vue3TouchEventsOptions & undefined>;
+declare const Vue3TouchEvents: Plugin;
 
 export interface Vue3TouchEventsOptions {
   disableClick?: boolean;
