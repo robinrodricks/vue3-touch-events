@@ -52,12 +52,30 @@ yarn add vue3-touch-events
 
 You need to register this plugin with vue.js in your main application file:
 
+
 ```js
 import Vue from "vue";
 import Vue3TouchEvents from "vue3-touch-events";
 
 Vue.use(Vue3TouchEvents);
 ```
+
+### TypeScript Vue 3.4+
+
+You need to register this plugin with your vue.js app:
+
+```js
+import Vue3TouchEvents, {
+  type Vue3TouchEventsOptions,
+} from "vue3-touch-events";
+
+app.use<Vue3TouchEventsOptions>(Vue3TouchEvents, {
+  disableClick: false
+  // any other global options...
+})
+```
+
+Global options that can be added are [listed here](#global-configuration).
 
 ### JavaScript
 
