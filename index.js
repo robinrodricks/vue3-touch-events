@@ -44,6 +44,7 @@ var vueTouchEvents = {
             touchClass: '',
 			dragFrequency: 100, // ms
 			rollOverFrequency: 100, // ms
+            namespace: 'touch',
         }, constructorOptions);
 
         function touchStartEvent(event) {
@@ -317,7 +318,7 @@ var vueTouchEvents = {
             return $el.$$touchObj;
         }
 
-        app.directive('touch', {
+        app.directive(globalOptions.namespace, {
             beforeMount: function ($el, binding) {
                 // build a touch configuration object
                 var $this = buildTouchObj($el);
@@ -396,7 +397,7 @@ var vueTouchEvents = {
             }
         });
 
-        app.directive('touch-class', {
+        app.directive(`${globalOptions.namespace}-class`, {
             beforeMount: function ($el, binding) {
                 buildTouchObj($el, {
                     touchClass: binding.value
@@ -404,7 +405,7 @@ var vueTouchEvents = {
             }
         });
 
-        app.directive('touch-options', {
+        app.directive(`${globalOptions.namespace}-options`, {
             beforeMount: function($el, binding) {
                 buildTouchObj($el, binding.value);
             }
