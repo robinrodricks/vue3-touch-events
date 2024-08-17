@@ -1,6 +1,6 @@
 {
   "name": "vue3-touch-events",
-  "version": "4.1.8",
+  "version": "4.2.0",
   "description": "Simple touch events support for vue.js 3",
   "main": "index.js",
   "types": "index.d.ts",

@@ -4,8 +4,6 @@
 
 The easiest way to make your interactive vue.js content mobile-friendly. When you add `v-touch` events to your elements, it works on desktop and mobile using a fully declarative syntax. Unlike other libraries, you do not need to add any special code to your components to make this work. You simply have to register the library globally and it enables new events throughout your application.
 
-### Note: Press the play button to the right of the image!
-
 ![Events](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/animation.gif)
 
 Released under the permissive MIT License.
@@ -336,3 +334,4 @@ Vue.use(Vue3TouchEvents, {
 
 - `rollOverFrequency` in milliseconds - How often should `rollover` events be fired.  **Default:**  `100` MS (10 times a second).
 
+- `namespace` - Allows you to customize which Vue namespace this plugin uses. The default namespace is `touch` which adds the Vue directives: `touch`, `touch-class` and `touch-options`. Changing it to another value, for example `yolo`, would add the Vue directives: `yolo`, `yolo-class` and `yolo-options`.
