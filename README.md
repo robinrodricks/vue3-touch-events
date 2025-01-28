@@ -4,7 +4,7 @@
 
 The easiest way to make your interactive vue.js content mobile-friendly. When you add `v-touch` events to your elements, it works on desktop and mobile using a fully declarative syntax. Unlike other libraries, you do not need to add any special code to your components to make this work. You simply have to register the library globally and it enables new events throughout your application.
 
-![Events](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/animation.gif)
+![Events](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/anim-all.gif)
 
 Released under the permissive MIT License.
 
@@ -196,6 +196,8 @@ methods: {
 
 ## Touch and Tap
 
+![Events](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/anim-tap.gif)
+
 These events are provided by this library. **Most of these work on Desktop & Mobile.**
 
 | Event &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     | Behaviour          |
@@ -242,6 +244,8 @@ These are the default interactivity events supported by vue.js 3.x.
 
 ## Drag and Drop
 
+![Events](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/anim-drag.gif)
+
 These drag-and-drop events are provided by this library. **All these work on Desktop & Mobile.**
 
 | <div style="width:170px">Event</div>     | Behaviour          |
@@ -267,13 +271,13 @@ These settings can be optionally specified in the [Global Config](#global-config
 
 These swiping events are provided by this library. **All these work on Desktop & Mobile.**
 
-| <div style="width:250px">Event</div>     | Behaviour          |
+| Image | <div style="width:250px">Event</div>     | Behaviour          |
 | ---------------------------------------- | ------------------ |
-| `v-touch:swipe`              | Triggered when the user drags on the element (swipe). <br> It will detect the direction of the swipe and send it to your callback. <br> First argument of the callback must be `direction` attribute, which can be `left`, `right`, `top` or `bottom`. <br> Example callback: `onSwipe(direction){ ... }` |
-| `v-touch:swipe.left` | Triggered when the user drags on the element within the left cone. |
-| `v-touch:swipe.right` | Triggered when the user drags on the element within the left cone. |
-| `v-touch:swipe.top` | Triggered when the user drags on the element within the top cone. |
-| `v-touch:swipe.bottom` | Triggered when the user drags on the element within the bottom cone. |
+|  | `v-touch:swipe`              | Triggered when the user drags on the element (swipe). <br> It will detect the direction of the swipe and send it to your callback. <br> First argument of the callback must be `direction` attribute, which can be `left`, `right`, `top` or `bottom`. <br> Example callback: `onSwipe(direction){ ... }` |
+| ![Pic](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/icons0004.png) | `v-touch:swipe.left` | Triggered when the user drags on the element within the left cone. |
+| ![Pic](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/icons0003.png) | `v-touch:swipe.right` | Triggered when the user drags on the element within the left cone. |
+| ![Pic](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/icons0001.png) | `v-touch:swipe.top` | Triggered when the user drags on the element within the top cone. |
+|![Pic](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/icons0002.png) |  `v-touch:swipe.bottom` | Triggered when the user drags on the element within the bottom cone. |
 
 ### Swipe Settings
 
