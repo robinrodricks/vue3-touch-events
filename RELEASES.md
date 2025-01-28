@@ -12,7 +12,7 @@
 - Changed the swipe detection to use a cone rather than using blocks, allowing for more variance in swipe gesture direction.
 - Added swipe setting `swipeConeSize` to control the cone size.
 - Added zoom events `zoom`, `zoom.in` and `zoom.out` using multi-touch gesture tracking.
-- Added zoom options `zoomFrequency`,`zoomDistance`,`zoomInOutDistance`.
+- Added zoom options `zoomFrequency`,`zoomDistance`,`zoomInOutDistance` to customize the zoom behaviour.
 
 ### Version 4.1.8
 
