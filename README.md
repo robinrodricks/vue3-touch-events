@@ -29,17 +29,14 @@ Version:
 
 ## Installation
 
-To install with npm:
+To install:
 
-```shell
-npm install vue3-touch-events
-```
+| Package Manager | Command                                    |
+|-----------------|--------------------------------------------|
+| npm             | `npm install vue3-touch-events`            |
+| bun             | `bun add vue3-touch-events`                |
+| yarn            | `yarn add vue3-touch-events`               |
 
-To install with yarn:
-
-```shell
-yarn add vue3-touch-events
-```
 
 ### TypeScript
 
