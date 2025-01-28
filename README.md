@@ -386,6 +386,7 @@ span.active {
 }
 ```
 
+
 ## Global configuration
 
 ```js
@@ -394,19 +395,13 @@ Vue.use(Vue3TouchEvents, {
 });
 ```
 
-- `disableClick` - Whether to disable desktop events. **Default:** `false`.
+General settings:
 
-  Keep the default value or `false` if your application is used on desktop and mobile devices.
-
-  If your application is only for mobile use, set this to `true` to get a better user experience, because it can resolve some touch pass-through issues encountered on mobile devices.
-
-- `touchClass` - Which CSS class to add while an element is rolled over (desktop) or tapped (mobile). **Default:** `''`
-
-  This is a global config, and you can use `v-touch-class` directive to override this setting for a single element.
-
-- `namespace` - Allows you to customize which Vue namespace this plugin uses. The default namespace is `touch` which adds the Vue directives: `touch`, `touch-class` and `touch-options`. Changing it to another value, for example `yolo`, would add the Vue directives: `yolo`, `yolo-class` and `yolo-options`.
-
-
+| Name           | Units    | Comment                                                                                               |
+|----------------|----------|-------------------------------------------------------------------------------------------------------|
+| `disableClick` | boolean  | Whether to disable desktop events. **Default:** `false`. <br> Keep the default value or `false` if your application is used on desktop and mobile devices. <br> If your application is only for mobile use, set this to `true` to get a better user experience, because it can resolve some touch pass-through issues encountered on mobile devices.                                              |
+| `touchClass`   | string   | Which CSS class to add while an element is rolled over (desktop) or tapped (mobile). **Default:** `''`. <br> This is a global config, and you can use `v-touch-class` directive to override this setting for a single element. |
+| `namespace`    | string   | Allows you to customize which Vue namespace this plugin uses. The default namespace is `touch` which adds the Vue directives: `touch`, `touch-class` and `touch-options`. Changing it to another value, for example `yolo`, would add the Vue directives: `yolo`, `yolo-class` and `yolo-options`.   |
 
 
 
