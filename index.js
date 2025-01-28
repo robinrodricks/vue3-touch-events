@@ -128,16 +128,17 @@ var vueTouchEvents = {
 			var $this = this.$$touchObj;
 			if ($this.touchStarted == true) {
 
-				// process
-				touchMoveEvent(event);
+				// process event and pass 'this' onward
+				touchMoveEvent(event, $this);
 			}
 		}
 
 		/** 
 		Fired when the user DRAGS the object or MOVES the mouse over the object.
 		*/
-		function touchMoveEvent(event) {
-			var $this = this.$$touchObj;
+		function touchMoveEvent(event, $this = null) {
+
+			if ($this == null) $this = this.$$touchObj;
 
 			var curX = touchX(event);
 			var curY = touchY(event);
