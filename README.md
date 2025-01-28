@@ -8,9 +8,10 @@ The easiest way to make your interactive vue.js content mobile-friendly. When yo
 
 Released under the permissive MIT License.
 
-Features:
 
-- Declarative syntax for common touch events, such as (`tap`)(#touch-and-tap), [`swipe`](#swipe), [`zoom`](#zoom), `hold`, [`drag`](#drag-and-drop)
+## Features
+
+- Declarative syntax for common touch events, such as [tap, hold](#touch-and-tap), [swipe](#swipe), [zoom](#zoom) and [drag](#drag-and-drop)
 - Most events support desktop (mouse) and mobile devices (touch screen) with the same syntax
 - Automatically add styling on hover and tap using `v-touch-class` directive
 - Bind multiple touch events on one DOM element
@@ -23,12 +24,6 @@ Features:
 Version:
 
 > Note: This library is for **vue.js 3.x** only. For **vue.js 2.x** see the [older library](https://github.com/jerrybendy/vue-touch-events).
-
-Credits:
-
-- All credits go to Jerry Bendy for creating the original project [vue2-touch-events](https://github.com/jerrybendy/vue-touch-events)
-- Special thanks to Xavier Julien for creating the [Vue 3.x port](https://github.com/XjulI1/vue-touch-events/tree/migrate-to-vuejs-3)
-
 
 
 
@@ -429,3 +424,11 @@ Vue.use(Vue3TouchEvents, {
   This is a global config, and you can use `v-touch-class` directive to override this setting for a single element.
 
 - `namespace` - Allows you to customize which Vue namespace this plugin uses. The default namespace is `touch` which adds the Vue directives: `touch`, `touch-class` and `touch-options`. Changing it to another value, for example `yolo`, would add the Vue directives: `yolo`, `yolo-class` and `yolo-options`.
+
+
+
+
+## Credits
+
+- All credits go to Jerry Bendy for creating the original project [vue2-touch-events](https://github.com/jerrybendy/vue-touch-events)
+- Special thanks to Xavier Julien for creating the [Vue 3.x port](https://github.com/XjulI1/vue-touch-events/tree/migrate-to-vuejs-3)
