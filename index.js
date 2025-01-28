@@ -125,6 +125,7 @@ var vueTouchEvents = {
 		function touchMoveEventWindow(event) {
 
 			// only process if pressed
+			var $this = this.$$touchObj;
 			if ($this.touchStarted == true) {
 
 				// process
@@ -294,8 +295,8 @@ var vueTouchEvents = {
 		}
 
 		function touchCancelEvent() {
+			var $this = this.$$touchObj;
 			if ($this.touchStarted == true) {
-				var $this = this.$$touchObj;
 
 				cancelTouchHoldTimer($this);
 				removeTouchClass(this);
@@ -307,11 +308,11 @@ var vueTouchEvents = {
 
 		/** Fired when the user performs a MOUSE UP on the object (releases the mouse button or finger press) */
 		function touchEndEvent(event) {
+			var $this = this.$$touchObj;
 			if ($this.touchStarted == true) {
 
-				var $this = this.$$touchObj,
-					isTouchEvent = event.type.indexOf('touch') >= 0,
-					isMouseEvent = event.type.indexOf('mouse') >= 0;
+				var isTouchEvent = event.type.indexOf('touch') >= 0;
+				var isMouseEvent = event.type.indexOf('mouse') >= 0;
 
 				if (isTouchEvent) {
 					$this.lastTouchEndTime = event.timeStamp;
