@@ -468,13 +468,32 @@ var vueTouchEvents = {
 				// prevent bind twice, set to true when event bound
 				hasBindTouchEvents: false,
 				// default options, would be override by v-touch-options
-				options: globalOptions
+				options: globalOptions,
+				events: {}
 			};
 			if (extraOptions) {
 				touchObj.options = Object.assign({}, touchObj.options, extraOptions);
 			}
 			$el.$$touchObj = touchObj;
 			return $el.$$touchObj;
+		}
+
+		function addEvents(events) {
+			for (const eventName in events) {
+				if (events.hasOwnProperty(eventName)) {
+					const [target, handler] = events[eventName];
+					target.addEventListener(eventName, handler);
+				}
+			}
+		}
+
+		function removeEvents(events) {
+			for (const eventName in events) {
+				if (events.hasOwnProperty(eventName)) {
+					const [target, handler] = events[eventName];
+					target.removeEventListener(eventName, handler);
+				}
+			}
 		}
 
 		app.directive(globalOptions.namespace, {
@@ -518,21 +537,38 @@ var vueTouchEvents = {
 					return;
 				}
 
-				var dragEventObj = $this.options.dragOutside ? window : $el;
-				var dragEventHandler = $this.options.dragOutside ? touchMoveEventWindow : touchMoveEvent;
-
-				$el.addEventListener('touchstart', touchStartEvent, passiveOpt);
-				dragEventObj.addEventListener('touchmove', dragEventHandler, passiveOpt);
-				dragEventObj.addEventListener('touchcancel', touchCancelEvent);
-				dragEventObj.addEventListener('touchend', touchEndEvent);
-
-				if (!$this.options.disableClick) {
-					$el.addEventListener('mousedown', touchStartEvent);
-					dragEventObj.addEventListener('mousemove', dragEventHandler);
-					dragEventObj.addEventListener('mouseup', touchEndEvent);
-					$el.addEventListener('mouseenter', mouseEnterEvent);
-					$el.addEventListener('mouseleave', mouseLeaveEvent);
+				// ADD MOBILE EVENTS
+				if ($this.options.dragOutside) {
+					$this.events['touchstart'] = [$el, touchStartEvent];
+					$this.events['touchmove'] = [window, touchMoveEventWindow.bind(this)];
+					$this.events['touchcancel'] = [window, touchCancelEvent.bind(this)];
+					$this.events['touchend'] = [window, touchEndEvent.bind(this)];
+				} else {
+					$this.events['touchstart'] = [$el, touchStartEvent];
+					$this.events['touchmove'] = [$el, touchMoveEventWindow];
+					$this.events['touchcancel'] = [$el, touchCancelEvent];
+					$this.events['touchend'] = [$el, touchEndEvent.bind];
 				}
+
+				// ADD DESKTOP EVENTS
+				if (!$this.options.disableClick) {
+					if ($this.options.dragOutside) {
+						$this.events['mousedown'] = [$el, touchStartEvent];
+						$this.events['mousemove'] = [window, touchMoveEventWindow.bind(this)];
+						$this.events['mouseup'] = [window, touchEndEvent.bind(this)];
+						$this.events['mouseenter'] = [$el, mouseEnterEvent];
+						$this.events['mouseleave'] = [$el, mouseLeaveEvent];
+					} else {
+						$this.events['mousedown'] = [$el, touchStartEvent];
+						$this.events['mousemove'] = [$el, touchMoveEvent];
+						$this.events['mouseup'] = [$el, touchEndEvent];
+						$this.events['mouseenter'] = [$el, mouseEnterEvent];
+						$this.events['mouseleave'] = [$el, mouseLeaveEvent];
+					}
+				}
+
+				// register all events
+				addEvents($this.events);
 
 				// set bind mark to true
 				$this.hasBindTouchEvents = true;
@@ -543,20 +579,10 @@ var vueTouchEvents = {
 
 				cancelTouchHoldTimer(touchObj);
 
-				var dragEventObj = touchObj?.options?.dragOutside ? window : $el;
-				var dragEventHandler = touchObj?.options?.dragOutside ? touchMoveEventWindow : touchMoveEvent;
-
-				$el.removeEventListener('touchstart', touchStartEvent);
-				dragEventObj.removeEventListener('touchmove', dragEventHandler);
-				dragEventObj.removeEventListener('touchcancel', touchCancelEvent);
-				dragEventObj.removeEventListener('touchend', touchEndEvent);
-
-				if (touchObj && !touchObj.options.disableClick) {
-					$el.removeEventListener('mousedown', touchStartEvent);
-					dragEventObj.addEventListener('mousemove', dragEventHandler);
-					dragEventObj.removeEventListener('mouseup', touchEndEvent);
-					$el.removeEventListener('mouseenter', mouseEnterEvent);
-					$el.removeEventListener('mouseleave', mouseLeaveEvent);
+				// unregister all events
+				if (touchObj && touchObj.events) {
+					removeEvents(touchObj.events);
+					touchObj.events = {};
 				}
 
 				// remove vars
