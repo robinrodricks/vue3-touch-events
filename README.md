@@ -196,7 +196,7 @@ methods: {
 
 ## Touch and Tap
 
-These events are provided by this library. Most events work on Desktop & Mobile devices.
+These events are provided by this library. **Most of these work on Desktop & Mobile.**
 
 | Event &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     | Behaviour          |
 | ---------------------------------------------------- | ------------------ |
@@ -242,7 +242,7 @@ These are the default interactivity events supported by vue.js 3.x.
 
 ## Drag and Drop
 
-These drag-and-drop events are provided by this library.
+These drag-and-drop events are provided by this library. **All these work on Desktop & Mobile.**
 
 | <div style="width:170px">Event</div>     | Behaviour          |
 | ---------------------------------------- | ------------------ |
@@ -265,7 +265,7 @@ These settings can be optionally specified in the [Global Config](#global-config
 
 ## Swipe
 
-These swiping events are provided by this library.
+These swiping events are provided by this library. **All these work on Desktop & Mobile.**
 
 | <div style="width:250px">Event</div>     | Behaviour          |
 | ---------------------------------------- | ------------------ |
@@ -292,9 +292,7 @@ These settings can be optionally specified in the [Global Config](#global-config
 
 ## Zoom
 
-These zooming events are provided by this library.
-
-**All these are mobile-only as they required multi-touch (at least 2 fingers) to work.**
+These zooming events are provided by this library. **These are mobile-only as they require multi-touch (at least 2 fingers) to trigger.**
 
 | <div style="width:200px">Event</div>     | Behaviour          |
 | ---------------------------------------- | ------------------ |
