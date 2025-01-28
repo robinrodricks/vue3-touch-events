@@ -102,12 +102,15 @@ var vueTouchEvents = {
 			$this.touchStartTime = event.timeStamp;
 
 			// performance: only process swipe events if `swipe.*` event is registered on this element
-			$this.hasSwipe = hasEvent(this, 'swipe')
-				|| hasEvent(this, 'swipe.left') || hasEvent(this, 'swipe.right')
-				|| hasEvent(this, 'swipe.top') || hasEvent(this, 'swipe.bottom');
+			$this.hasSwipe = hasEvent($this, 'swipe')
+				|| hasEvent($this, 'swipe.left') || hasEvent($this, 'swipe.right')
+				|| hasEvent($this, 'swipe.top') || hasEvent($this, 'swipe.bottom');
+
+			// performance: only process zoom events if `zoom.*` event is registered on this element
+			$this.hasZoom = hasEvent($this, 'zoom') || hasEvent($this, 'zoom.in') || hasEvent($this, 'zoom.out');
 
 			// performance: only start hold timer if the `hold` event is registered on this element
-			if (hasEvent(this, 'hold')) {
+			if (hasEvent($this, 'hold')) {
 
 				// Trigger touchhold event after `touchHoldTolerance` MS
 				$this.touchHoldTimer = setTimeout(function () {
@@ -162,7 +165,7 @@ var vueTouchEvents = {
 				// (`touchMoved` is the flag that indicates we no longer need to trigger this)
 				if ($this.touchMoved) {
 					cancelTouchHoldTimer($this);
-					triggerEvent(event, this, 'drag.once');
+					triggerEvent(event, $this.element, 'drag.once');
 				}
 
 			}
@@ -185,14 +188,14 @@ var vueTouchEvents = {
 			//									ROLL OVER
 			//--------------------------------------------------------------------------------------
 			// only trigger `rollover` event if cursor actually moved over this element
-			if (hasEvent(this, 'rollover') && movedAgain) {
+			if (movedAgain && hasEvent($this, 'rollover')) {
 
 				// throttle the `rollover` event based on `rollOverFrequency`
 				var now = event.timeStamp;
 				if ($this.touchRollTime == null || now > ($this.touchRollTime + $this.options.rollOverFrequency)) {
 					$this.touchRollTime = now;
 
-					triggerEvent(event, this, 'rollover');
+					triggerEvent(event, $this.element, 'rollover');
 				}
 			}
 
@@ -200,14 +203,14 @@ var vueTouchEvents = {
 			//										DRAG
 			//--------------------------------------------------------------------------------------
 			// only trigger `drag` event if cursor actually moved and if we are still dragging this element
-			if (hasEvent(this, 'drag') && $this.touchStarted && $this.touchMoved && movedAgain) {
+			if ($this.touchStarted && $this.touchMoved && movedAgain && hasEvent($this, 'drag')) {
 
 				// throttle the `drag` event based on `dragFrequency`
 				var now = event.timeStamp;
 				if ($this.touchDragTime == null || now > ($this.touchDragTime + $this.options.dragFrequency)) {
 					$this.touchDragTime = now;
 
-					triggerEvent(event, this, 'drag');
+					triggerEvent(event, $this.element, 'drag');
 				}
 			}
 
@@ -215,7 +218,7 @@ var vueTouchEvents = {
 			//										ZOOM
 			//--------------------------------------------------------------------------------------
 			// only trigger `zoom` event if cursor actually moved
-			if ($this.touchStarted && (hasEvent(this, 'zoom') || hasEvent(this, 'zoom.in') || hasEvent(this, 'zoom.out'))) {
+			if ($this.touchStarted && $this.hasZoom) {
 
 				// throttle the `zoom` event based on `zoomFrequency`
 				var now = event.timeStamp;
@@ -261,31 +264,31 @@ var vueTouchEvents = {
 			//--------------------------------------------------------------------------------------
 			//										ZOOM
 			//--------------------------------------------------------------------------------------
-			if (hasEvent(this, 'zoom')) {
+			if (hasEvent($this, 'zoom')) {
 
 				// check if the zoom factor exceeds the threshold for zooming
 				if (Math.abs(zoomFactor - 1) > ($this.options.zoomDistance / $this.initialZoomDistance)) {
 
 					// trigger the zoom callback with the source and zoom factor
-					triggerEvent(event, this, 'zoom', zoomFactor);
+					triggerEvent(event, $this.element, 'zoom', zoomFactor);
 				}
 			}
 
 			//--------------------------------------------------------------------------------------
 			//									ZOOM IN/OUT
 			//--------------------------------------------------------------------------------------
-			if (hasEvent(this, 'zoom.in') || hasEvent(this, 'zoom.out')) {
+			if (hasEvent($this, 'zoom.in') || hasEvent($this, 'zoom.out')) {
 
 				// check if the distance change is significant enough to count as a zoom gesture
 				if (Math.abs(newDistance - $this.initialZoomDistance) > $this.options.zoomInOutDistance) {
 
 					// determine zoom direction
 					if (newDistance > $this.initialZoomDistance) {
-						// fingers moved apart → zoom in
-						triggerEvent(event, this, 'zoom.in');
+						// fingers moved apart = zoom in
+						triggerEvent(event, $this.element, 'zoom.in');
 					} else {
-						// fingers moved closer → zoom out
-						triggerEvent(event, this, 'zoom.out');
+						// fingers moved closer = zoom out
+						triggerEvent(event, $this.element, 'zoom.out');
 					}
 				}
 			}
@@ -344,13 +347,13 @@ var vueTouchEvents = {
 
 				if (!$this.touchMoved) {
 					// detect if this is a longTap event or not
-					if (hasEvent(this, 'longtap') && event.timeStamp - $this.touchStartTime > $this.options.longTapTimeInterval) {
+					if (hasEvent($this, 'longtap') && event.timeStamp - $this.touchStartTime > $this.options.longTapTimeInterval) {
 						if (event.cancelable) {
 							event.preventDefault();
 						}
 						triggerEvent(event, this, 'longtap');
 
-					} else if (hasEvent(this, 'hold') && touchholdEnd) {
+					} else if (hasEvent($this, 'hold') && touchholdEnd) {
 						if (event.cancelable) {
 							event.preventDefault();
 						}
@@ -382,7 +385,7 @@ var vueTouchEvents = {
 						}
 
 						// Only emit the specified event when it has modifiers
-						if (hasEvent(this, 'swipe.' + direction)) {
+						if (hasEvent($this, 'swipe.' + direction)) {
 							triggerEvent(event, this, 'swipe.' + direction, direction);
 						} else {
 							// Emit a common event when it has no any modifier
@@ -401,8 +404,8 @@ var vueTouchEvents = {
 			removeTouchClass(this);
 		}
 
-		function hasEvent($el, eventType) {
-			var callbacks = $el.$$touchObj.callbacks[eventType];
+		function hasEvent($this, eventType) {
+			var callbacks = $this.callbacks[eventType];
 			return (callbacks != null && callbacks.length > 0);
 		}
 
@@ -463,6 +466,7 @@ var vueTouchEvents = {
 
 		function buildTouchObj($el, extraOptions) {
 			var touchObj = $el.$$touchObj || {
+				element: $el,
 				// an object contains all callbacks registered,
 				// key is event name, value is an array
 				callbacks: {},
@@ -470,7 +474,7 @@ var vueTouchEvents = {
 				hasBindTouchEvents: false,
 				// default options, would be override by v-touch-options
 				options: globalOptions,
-				events: {}
+				events: {},
 			};
 			if (extraOptions) {
 				touchObj.options = Object.assign({}, touchObj.options, extraOptions);
