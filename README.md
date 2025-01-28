@@ -38,6 +38,9 @@ To install:
 | yarn            | `yarn add vue3-touch-events`               |
 
 
+Release notes are found in the [RELEASES.md](RELEASES.md) file.
+
+
 ### TypeScript
 
 You need to register this plugin with vue.js in your main application file:
