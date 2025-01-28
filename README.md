@@ -282,7 +282,7 @@ These settings can be optionally specified in the [Global Config](#global-config
 | Setting          | Units        | Comment                                                                |
 |------------------|--------------|------------------------------------------------------------------------|
 | `swipeTolerance` | pixels     | How many pixels the user must drag on the element for it to register as a `swipe` event. **Default:** `100` pixels. |
-| `swipeConeSize`  | number (0-1) | How wide should the "swipe cone" be. The wider the cone, the more off-axis gestures are considered as swipes. |
+| `swipeConeSize`  | number (0-1) | How wide should the "swipe cone" be. The wider the cone, the more off-axis gestures are considered as swipes. **Default:** `0.75` |
 
 ![Cone](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/swipe-cone.png)
 
@@ -311,8 +311,8 @@ These settings can be optionally specified in the [Global Config](#global-config
 | Name                | Units        | Comment                                                                |
 |---------------------|--------------|------------------------------------------------------------------------|
 | `zoomFrequency`     | milliseconds | How often should `zoom` / `zoom.in` / `zoom.out` events be fired. **Default:** `10` MS (100 times a second). |
-| `zoomDistance`      | pixels       | How many pixels should the user move their fingers to trigger a `zoom` event. |
-| `zoomInOutDistance` | pixels       | How many pixels should the user move their fingers to trigger a `zoom.in` or `zoom.out` event. |
+| `zoomDistance`      | pixels       | How many pixels should the user move their fingers to trigger a `zoom` event. **Default:** `10` |
+| `zoomInOutDistance` | pixels       | How many pixels should the user move their fingers to trigger a `zoom.in` or `zoom.out` event. **Default:** `100` |
 
 
 
