@@ -146,10 +146,10 @@ Specify the event using the first argument, for example `v-touch:tap` or `v-touc
 <span v-touch:tap="tapHandler" v-touch-options="{touchClass: 'active'}">Customize touch class</span>
 
 <!-- zoom in -->
-<span v-touch:zoom-in="zoomInHandler">Use multi-touch to zoom in</span>
+<span v-touch:zoom.in="zoomInHandler">Use multi-touch to zoom in</span>
 
 <!-- zoom out -->
-<span v-touch:zoom-out="zoomOutHandler">Use multi-touch to zoom out</span>
+<span v-touch:zoom.out="zoomOutHandler">Use multi-touch to zoom out</span>
 ```
 
 
@@ -255,7 +255,7 @@ These drag-and-drop events are provided by this library.
 | `v-touch:drag`             | Triggered when the user presses and drags the element. <br> Fired every time the mouse moves while dragging the element.  <br> This event is throttled to prevent too many events per second. <br>  This event will fire every `dragFrequency` MS.   |
 | `v-touch:release`                | **Desktop:** Triggered when the user releases the element (mouse up). <br> **Mobile:** Triggered when the user taps and releases the element.  |
 
-#### Drag Settings
+### Drag Settings
 
 These settings can be optionally specified in the [Global Config](#global-configuration). If they are not specified, defaults are used.
 
@@ -268,16 +268,19 @@ These settings can be optionally specified in the [Global Config](#global-config
 
 ## Swipe
 
-#### Swipe Events
+### Swipe Events
 
 These swiping events are provided by this library.
 
-| <div style="width:170px">Event</div>     | Behaviour          |
+| <div style="width:250px">Event</div>     | Behaviour          |
 | ---------------------------------------- | ------------------ |
 | `v-touch:swipe`              | Triggered when the user drags on the element (swipe). <br> It will detect the direction of the swipe and send it to your callback. <br> First argument of the callback must be `direction` attribute, which can be `left`, `right`, `top` or `bottom`. <br> Example callback: `onSwipe(direction){ ... }` |
-| `v-touch:swipe.left` <br>`v-touch:swipe.right` <br>`v-touch:swipe.top` <br>`v-touch:swipe.bottom` <br> | Triggered when the user drags on the element in a specific direction (directional swipe).
+| `v-touch:swipe.left` | Triggered when the user drags on the element within the left cone. |
+| `v-touch:swipe.right` | Triggered when the user drags on the element within the left cone. |
+| `v-touch:swipe.top` | Triggered when the user drags on the element within the top cone. |
+| `v-touch:swipe.bottom` | Triggered when the user drags on the element within the bottom cone. |
 
-#### Swipe Settings
+### Swipe Settings
 
 These settings can be optionally specified in the [Global Config](#global-configuration). If they are not specified, defaults are used.
 
@@ -293,25 +296,27 @@ These settings can be optionally specified in the [Global Config](#global-config
 
 ## Zoom
 
-#### Zoom Events
+### Zoom Events
 
 These zooming events are provided by this library.
 
-| <div style="width:170px">Event</div>     | Behaviour          |
+**All these are mobile-only as they required multi-touch (at least 2 fingers) to work.**
+
+| <div style="width:200px">Event</div>     | Behaviour          |
 | ---------------------------------------- | ------------------ |
 | `v-touch:zoom`                | **Mobile only:** Triggered when the user presses 2 fingers down and moves them inward or outward. This event is continuously fired as the user is zooming. <br> First argument of the callback will recieve the zoom factor. <br> Example callback: `onZoom(zoomFactor){ ... }` |
-| `v-touch:zoom-in`                | **Mobile only:** Triggered when the user presses 2 fingers down and moves them towards each other (the normal "zoom in" gesture) |
-| `v-touch:zoom-out`                | **Mobile only:** Triggered when the user presses 2 fingers down and moves them away from each other (the normal "zoom out" gesture) |
+| `v-touch:zoom.in`                | **Mobile only:** Triggered when the user presses 2 fingers down and moves them towards each other (the normal "zoom in" gesture) |
+| `v-touch:zoom.out`                | **Mobile only:** Triggered when the user presses 2 fingers down and moves them away from each other (the normal "zoom out" gesture) |
 
-#### Zoom Settings
+### Zoom Settings
 
 These settings can be optionally specified in the [Global Config](#global-configuration). If they are not specified, defaults are used.
 
-- `zoomFrequency` in milliseconds - How often should `zoom` / `zoom-in` / `zoom-out` events be fired.  **Default:**  `10` MS (100 times a second).
+- `zoomFrequency` in milliseconds - How often should `zoom` / `zoom.in` / `zoom.out` events be fired.  **Default:**  `10` MS (100 times a second).
 
 - `zoomDistance` in pixels - How many pixels should the user move their fingers to trigger a `zoom` event.
 
-- `zoomInOutDistance` in pixels - How many pixels should the user move their fingers to trigger a `zoom-in` or `zoom-out` event.
+- `zoomInOutDistance` in pixels - How many pixels should the user move their fingers to trigger a `zoom.in` or `zoom.out` event.
 
 
 

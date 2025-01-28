@@ -198,7 +198,7 @@ var vueTouchEvents = {
 			//										ZOOM
 			//--------------------------------------------------------------------------------------
 			// only trigger `zoom` event if cursor actually moved
-			if ($this.touchStarted && (hasEvent(this, 'zoom') || hasEvent(this, 'zoom-in') || hasEvent(this, 'zoom-out'))) {
+			if ($this.touchStarted && (hasEvent(this, 'zoom') || hasEvent(this, 'zoom.in') || hasEvent(this, 'zoom.out'))) {
 
 				// throttle the `zoom` event based on `zoomFrequency`
 				var now = event.timeStamp;
@@ -257,7 +257,7 @@ var vueTouchEvents = {
 			//--------------------------------------------------------------------------------------
 			//									ZOOM IN/OUT
 			//--------------------------------------------------------------------------------------
-			if (hasEvent(this, 'zoom-in') || hasEvent(this, 'zoom-out')) {
+			if (hasEvent(this, 'zoom.in') || hasEvent(this, 'zoom.out')) {
 
 				// check if the distance change is significant enough to count as a zoom gesture
 				if (Math.abs(newDistance - $this.initialZoomDistance) > $this.options.zoomInOutDistance) {
@@ -265,10 +265,10 @@ var vueTouchEvents = {
 					// determine zoom direction
 					if (newDistance > $this.initialZoomDistance) {
 						// fingers moved apart → zoom in
-						triggerEvent(event, this, 'zoom-in');
+						triggerEvent(event, this, 'zoom.in');
 					} else {
 						// fingers moved closer → zoom out
-						triggerEvent(event, this, 'zoom-out');
+						triggerEvent(event, this, 'zoom.out');
 					}
 				}
 			}
