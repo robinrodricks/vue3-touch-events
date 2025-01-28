@@ -9,14 +9,14 @@ function touchX(event) {
 	if (event.type.indexOf('mouse') !== -1) {
 		return event.clientX;
 	}
-	return event.touches[0].clientX;
+	return event.touches?.[0]?.clientX ?? 0;
 }
 
 function touchY(event) {
 	if (event.type.indexOf('mouse') !== -1) {
 		return event.clientY;
 	}
-	return event.touches[0].clientY;
+	return event.touches?.[0]?.clientY ?? 0;
 }
 
 var isPassiveSupported = (function () {
@@ -214,7 +214,7 @@ var vueTouchEvents = {
 
 
 			// get the list of changed touches from the event
-			const touches = e.changedTouches;
+			const touches = event.changedTouches;
 
 			// check if exactly two fingers are being used
 			if (touches.length !== 2) {
@@ -309,8 +309,17 @@ var vueTouchEvents = {
 				return;
 			}
 
+			//--------------------------------------------------------------------------------------
+			//									RELEASE
+			//--------------------------------------------------------------------------------------
+
 			// trigger `end` event when touch stopped
 			triggerEvent(event, this, 'release');
+
+
+			//--------------------------------------------------------------------------------------
+			//								LONGTAP / HOLD / TAP
+			//--------------------------------------------------------------------------------------
 
 			if (!$this.touchMoved) {
 				// detect if this is a longTap event or not
@@ -330,8 +339,13 @@ var vueTouchEvents = {
 					triggerEvent(event, this, 'tap');
 				}
 
-				// performance: only process swipe events if `swipe.*` event is registered on this element
-			} else if ($this.hasSwipe && !$this.swipeOutBounded) {
+			}
+
+			//--------------------------------------------------------------------------------------
+			//									SWIPE
+			//--------------------------------------------------------------------------------------
+			// only process swipe events if `swipe.*` event is registered on this element
+			else if ($this.hasSwipe && !$this.swipeOutBounded) {
 				var swipeOutBounded = $this.options.swipeTolerance,
 					direction,
 					distanceY = Math.abs($this.startY - $this.currentY),
