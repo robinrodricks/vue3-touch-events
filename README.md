@@ -9,6 +9,11 @@ The easiest way to make your interactive vue.js content mobile-friendly. When yo
 Released under the permissive MIT License.
 
 
+## What's New!
+
+- [Cone swiping](#swipe) and [Zoom](#zoom) is new in version 5! If you encounter any issues with these please file an issue!
+- We now support sending [drag](#drag-and-drop) events when users drag outside an object! (set `dragOutside = true`)
+
 ## Features
 
 - Declarative syntax for common touch events, such as [tap, hold](#touch-and-tap), [swipe](#swipe), [zoom](#zoom) and [drag](#drag-and-drop)
