@@ -272,7 +272,7 @@ These settings can be optionally specified in the [Global Config](#global-config
 These swiping events are provided by this library. **All these work on Desktop & Mobile.**
 
 | Gesture | Event     | Behaviour          |
-| ----------- | ----------------------------- | ------------------ |
+| ----------- | -------- | ------------------ |
 | ![Pic](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/events0005.png) | `v-touch:swipe`              | Triggered when the user drags on the element (swipe). <br> It will detect the direction of the swipe and send it to your callback. <br> First argument of the callback must be `direction` attribute, which can be `left`, `right`, `top` or `bottom`. <br> Example callback: `onSwipe(direction){ ... }` |
 | ![Pic](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/events0004.png) | `v-touch:swipe.left` | Triggered when the user drags on the element within the left cone. |
 | ![Pic](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/events0003.png) | `v-touch:swipe.right` | Triggered when the user drags on the element within the left cone. |
@@ -299,7 +299,7 @@ These settings can be optionally specified in the [Global Config](#global-config
 These zooming events are provided by this library. **These are mobile-only as they require multi-touch (at least 2 fingers) to trigger.**
 
 | Gesture | Event     | Behaviour          |
-| ---------------------------------------- | ------------------ |
+| ----------- | -------- | ------------------ |
 | ![Pic](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/events0008.png) | `v-touch:zoom`                | **Mobile only:** Triggered when the user presses 2 fingers down and moves them inward or outward. This event is continuously fired as the user is zooming. <br> First argument of the callback will recieve the zoom factor. <br> Example callback: `onZoom(zoomFactor){ ... }` |
 | ![Pic](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/events0006.png) | `v-touch:zoom.in`                | **Mobile only:** Triggered when the user presses 2 fingers down and moves them towards each other (the normal "zoom in" gesture) |
 | ![Pic](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/events0007.png) | `v-touch:zoom.out`                | **Mobile only:** Triggered when the user presses 2 fingers down and moves them away from each other (the normal "zoom out" gesture) |
