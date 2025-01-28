@@ -61,6 +61,8 @@ var vueTouchEvents = {
 			zoomDistance: 10, // px
 			zoomInOutDistance: 100, // px
 
+			// NOTE: When adding props here, update `index.d.ts` as well!!
+
 
 		}, constructorOptions);
 
