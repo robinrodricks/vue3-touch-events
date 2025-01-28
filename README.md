@@ -249,7 +249,7 @@ These drag-and-drop events are provided by this library. **All these work on Des
 | ---------------------------------------- | ------------------ |
 | `v-touch:press`              | **Desktop:** Triggered when the user presses the element (mouse down). <br> **Mobile:** Triggered when the user taps the element without releasing.    |
 | `v-touch:drag.once`              | Triggered when the user presses and drags the element. <br> Only fired once, the moment the user first drags on the element.   |
-| `v-touch:drag`             | Triggered when the user presses and drags the element. <br> Fired every time the mouse moves while dragging the element.  <br> This event is throttled to prevent too many events per second. <br>  This event will fire every `dragFrequency` MS.   |
+| `v-touch:drag`             | Triggered when the user presses and drags the element. <br> Fired every time the mouse moves while dragging the element.  <br> This event is throttled to prevent too many events per second. <br>  This event will fire every `dragFrequency` MS. Normally only fired when the mouse is **within** the element, but you can set `dragOutside` to fire it when the mouse is dragged **outside** the element too.   |
 | `v-touch:release`                | **Desktop:** Triggered when the user releases the element (mouse up). <br> **Mobile:** Triggered when the user taps and releases the element.  |
 
 ### Drag Settings
@@ -260,6 +260,7 @@ These settings can be optionally specified in the [Global Config](#global-config
 |------------------|--------------|------------------------------------------------------------------------|
 | `tapTolerance`   | pixels       | How many pixels the user must drag on the element for it to register as a `tap` event. **Default:** `10` pixels. |
 | `dragFrequency`  | milliseconds | How often should `drag` events be fired. **Default:** `10` MS (100 times a second). |
+| `dragOutside`    | boolean      | If the `drag` event should be fired when the mouse is dragged outside the object as well. Useful to implement drag-and-drop behaviour when the object being moved is the same element you have added `v-touch` events on. If this is true, rollover events will not fire. **Default:** `false` |
 
 
 

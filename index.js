@@ -50,6 +50,7 @@ var vueTouchEvents = {
 
 			// DRAG
 			dragFrequency: 10, // ms
+			dragOutside: false,
 
 			// SWIPE
 			swipeTolerance: 100,  // px
@@ -168,7 +169,7 @@ var vueTouchEvents = {
 			//									ROLL OVER
 			//--------------------------------------------------------------------------------------
 			// only trigger `rollover` event if cursor actually moved over this element
-			if (hasEvent(this, 'rollover') && movedAgain) {
+			if ((hasEvent(this, 'rollover') && movedAgain) && $this.options.dragOutside == false) {
 
 				// throttle the `rollover` event based on `rollOverFrequency`
 				var now = event.timeStamp;
@@ -497,14 +498,16 @@ var vueTouchEvents = {
 					return;
 				}
 
+				var dragEventObj = el.$$touchObj.options.dragOutside ? window : $el;
+
 				$el.addEventListener('touchstart', touchStartEvent, passiveOpt);
-				$el.addEventListener('touchmove', touchMoveEvent, passiveOpt);
+				dragEventObj.addEventListener('touchmove', touchMoveEvent, passiveOpt);
 				$el.addEventListener('touchcancel', touchCancelEvent);
 				$el.addEventListener('touchend', touchEndEvent);
 
 				if (!$this.options.disableClick) {
 					$el.addEventListener('mousedown', touchStartEvent);
-					$el.addEventListener('mousemove', touchMoveEvent);
+					dragEventObj.addEventListener('mousemove', touchMoveEvent);
 					$el.addEventListener('mouseup', touchEndEvent);
 					$el.addEventListener('mouseenter', mouseEnterEvent);
 					$el.addEventListener('mouseleave', mouseLeaveEvent);
@@ -515,16 +518,18 @@ var vueTouchEvents = {
 			},
 
 			unmounted: function ($el) {
-				cancelTouchHoldTimer($el.$$touchObj)
+				cancelTouchHoldTimer($el.$$touchObj);
+
+				var dragEventObj = el.$$touchObj.options.dragOutside ? window : $el;
 
 				$el.removeEventListener('touchstart', touchStartEvent);
-				$el.removeEventListener('touchmove', touchMoveEvent);
+				dragEventObj.removeEventListener('touchmove', touchMoveEvent);
 				$el.removeEventListener('touchcancel', touchCancelEvent);
 				$el.removeEventListener('touchend', touchEndEvent);
 
 				if ($el.$$touchObj && !$el.$$touchObj.options.disableClick) {
 					$el.removeEventListener('mousedown', touchStartEvent);
-					$el.removeEventListener('mousemove', touchMoveEvent);
+					dragEventObj.addEventListener('mousemove', touchMoveEvent);
 					$el.removeEventListener('mouseup', touchEndEvent);
 					$el.removeEventListener('mouseenter', mouseEnterEvent);
 					$el.removeEventListener('mouseleave', mouseLeaveEvent);
