@@ -65,7 +65,7 @@ app.use<Vue3TouchEventsOptions>(Vue3TouchEvents, {
 })
 ```
 
-Global options that can be added are [listed here](#global-configuration).
+Global options that can be added are [listed here](#global-configuration) and listed in each [feature section](#touch-and-tap).
 
 
 ### Nuxt 3+
@@ -206,7 +206,7 @@ These events are provided by this library. **Most of these work on Desktop & Mob
 
 ### Tap Settings
 
-These settings can be optionally specified in the [Global Config](#global-configuration). If they are not specified, defaults are used.
+These settings can be optionally specified in the [Global Config](#global-configuration) or [Object Config](#v-touch-options). If they are not specified, defaults are used.
 
 | Setting                | Units        | Comment                                                                 |
 |------------------------|--------------|-------------------------------------------------------------------------|
@@ -254,7 +254,7 @@ These drag-and-drop events are provided by this library. **All these work on Des
 
 ### Drag Settings
 
-These settings can be optionally specified in the [Global Config](#global-configuration). If they are not specified, defaults are used.
+These settings can be optionally specified in the [Global Config](#global-configuration) or [Object Config](#v-touch-options). If they are not specified, defaults are used.
 
 | Setting          | Units        | Comment                                                                |
 |------------------|--------------|------------------------------------------------------------------------|
@@ -279,7 +279,7 @@ These swiping events are provided by this library. **All these work on Desktop &
 
 ### Swipe Settings
 
-These settings can be optionally specified in the [Global Config](#global-configuration). If they are not specified, defaults are used.
+These settings can be optionally specified in the [Global Config](#global-configuration) or [Object Config](#v-touch-options). If they are not specified, defaults are used.
 
 | Setting          | Units        | Comment                                                                |
 |------------------|--------------|------------------------------------------------------------------------|
@@ -305,7 +305,7 @@ These zooming events are provided by this library. **These are mobile-only as th
 
 ### Zoom Settings
 
-These settings can be optionally specified in the [Global Config](#global-configuration). If they are not specified, defaults are used.
+These settings can be optionally specified in the [Global Config](#global-configuration) or [Object Config](#v-touch-options). If they are not specified, defaults are used.
 
 | Setting          | Units        | Comment                                                                |
 |------------------|--------------|------------------------------------------------------------------------|
