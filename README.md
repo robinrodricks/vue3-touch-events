@@ -13,7 +13,7 @@ Released under the permissive MIT License.
 
 - [Cone swiping](#swipe) and [Zoom](#zoom) is new in version 5! 
 - We now support sending [drag](#drag-and-drop) events when users drag outside an object! (set `dragOutside = true`)
-- If you encounter any issues with these please file an issue!
+- If you encounter any issues with these, please file an issue!
 
 ## Features
 
