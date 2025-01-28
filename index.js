@@ -120,8 +120,20 @@ var vueTouchEvents = {
 		}
 
 		/** 
+		Fired when the user MOVES the mouse over the window.
+		*/
+		function touchMoveEventWindow(event) {
+
+			// only process if pressed
+			if ($this.touchStarted == true) {
+
+				// process
+				touchMoveEvent(event);
+			}
+		}
+
+		/** 
 		Fired when the user DRAGS the object or MOVES the mouse over the object.
-		Fired every X milliseconds (based on `dragFrequency`).
 		*/
 		function touchMoveEvent(event) {
 			var $this = this.$$touchObj;
@@ -171,7 +183,7 @@ var vueTouchEvents = {
 			//									ROLL OVER
 			//--------------------------------------------------------------------------------------
 			// only trigger `rollover` event if cursor actually moved over this element
-			if ((hasEvent(this, 'rollover') && movedAgain) && $this.options.dragOutside == false) {
+			if (hasEvent(this, 'rollover') && movedAgain) {
 
 				// throttle the `rollover` event based on `rollOverFrequency`
 				var now = event.timeStamp;
@@ -282,93 +294,98 @@ var vueTouchEvents = {
 		}
 
 		function touchCancelEvent() {
-			var $this = this.$$touchObj;
+			if ($this.touchStarted == true) {
+				var $this = this.$$touchObj;
 
-			cancelTouchHoldTimer($this);
-			removeTouchClass(this);
+				cancelTouchHoldTimer($this);
+				removeTouchClass(this);
 
-			$this.touchStarted = $this.touchMoved = false;
-			$this.startX = $this.startY = 0;
+				$this.touchStarted = $this.touchMoved = false;
+				$this.startX = $this.startY = 0;
+			}
 		}
 
 		/** Fired when the user performs a MOUSE UP on the object (releases the mouse button or finger press) */
 		function touchEndEvent(event) {
-			var $this = this.$$touchObj,
-				isTouchEvent = event.type.indexOf('touch') >= 0,
-				isMouseEvent = event.type.indexOf('mouse') >= 0;
+			if ($this.touchStarted == true) {
 
-			if (isTouchEvent) {
-				$this.lastTouchEndTime = event.timeStamp;
-			}
+				var $this = this.$$touchObj,
+					isTouchEvent = event.type.indexOf('touch') >= 0,
+					isMouseEvent = event.type.indexOf('mouse') >= 0;
 
-			var touchholdEnd = isTouchEvent && !$this.touchHoldTimer;
-			cancelTouchHoldTimer($this);
-
-			$this.touchStarted = false;
-
-			removeTouchClass(this);
-
-			if (isMouseEvent && $this.lastTouchEndTime && event.timeStamp - $this.lastTouchEndTime < 350) {
-				return;
-			}
-
-			//--------------------------------------------------------------------------------------
-			//									RELEASE
-			//--------------------------------------------------------------------------------------
-
-			// trigger `end` event when touch stopped
-			triggerEvent(event, this, 'release');
-
-
-			//--------------------------------------------------------------------------------------
-			//								LONGTAP / HOLD / TAP
-			//--------------------------------------------------------------------------------------
-
-			if (!$this.touchMoved) {
-				// detect if this is a longTap event or not
-				if (hasEvent(this, 'longtap') && event.timeStamp - $this.touchStartTime > $this.options.longTapTimeInterval) {
-					if (event.cancelable) {
-						event.preventDefault();
-					}
-					triggerEvent(event, this, 'longtap');
-
-				} else if (hasEvent(this, 'hold') && touchholdEnd) {
-					if (event.cancelable) {
-						event.preventDefault();
-					}
-					return;
-				} else {
-					// emit tap event
-					triggerEvent(event, this, 'tap');
+				if (isTouchEvent) {
+					$this.lastTouchEndTime = event.timeStamp;
 				}
 
-			}
+				var touchholdEnd = isTouchEvent && !$this.touchHoldTimer;
+				cancelTouchHoldTimer($this);
 
-			//--------------------------------------------------------------------------------------
-			//									SWIPE
-			//--------------------------------------------------------------------------------------
-			// only process swipe events if `swipe.*` event is registered on this element
-			else if ($this.hasSwipe && !$this.swipeOutBounded) {
-				var swipeOutBounded = $this.options.swipeTolerance,
-					direction,
-					distanceY = Math.abs($this.startY - $this.currentY),
-					distanceX = Math.abs($this.startX - $this.currentX);
+				$this.touchStarted = false;
 
-				if (distanceY > swipeOutBounded || distanceX > swipeOutBounded) {
+				removeTouchClass(this);
 
-					// Check which swipe direction it is based on the mouse movement
-					if (distanceX > swipeOutBounded) {
-						direction = $this.startX > $this.currentX ? 'left' : 'right';
+				if (isMouseEvent && $this.lastTouchEndTime && event.timeStamp - $this.lastTouchEndTime < 350) {
+					return;
+				}
+
+				//--------------------------------------------------------------------------------------
+				//									RELEASE
+				//--------------------------------------------------------------------------------------
+
+				// trigger `end` event when touch stopped
+				triggerEvent(event, this, 'release');
+
+
+				//--------------------------------------------------------------------------------------
+				//								LONGTAP / HOLD / TAP
+				//--------------------------------------------------------------------------------------
+
+				if (!$this.touchMoved) {
+					// detect if this is a longTap event or not
+					if (hasEvent(this, 'longtap') && event.timeStamp - $this.touchStartTime > $this.options.longTapTimeInterval) {
+						if (event.cancelable) {
+							event.preventDefault();
+						}
+						triggerEvent(event, this, 'longtap');
+
+					} else if (hasEvent(this, 'hold') && touchholdEnd) {
+						if (event.cancelable) {
+							event.preventDefault();
+						}
+						return;
 					} else {
-						direction = $this.startY > $this.currentY ? 'top' : 'bottom';
+						// emit tap event
+						triggerEvent(event, this, 'tap');
 					}
 
-					// Only emit the specified event when it has modifiers
-					if (hasEvent(this, 'swipe.' + direction)) {
-						triggerEvent(event, this, 'swipe.' + direction, direction);
-					} else {
-						// Emit a common event when it has no any modifier
-						triggerEvent(event, this, 'swipe', direction);
+				}
+
+				//--------------------------------------------------------------------------------------
+				//									SWIPE
+				//--------------------------------------------------------------------------------------
+				// only process swipe events if `swipe.*` event is registered on this element
+				else if ($this.hasSwipe && !$this.swipeOutBounded) {
+					var swipeOutBounded = $this.options.swipeTolerance,
+						direction,
+						distanceY = Math.abs($this.startY - $this.currentY),
+						distanceX = Math.abs($this.startX - $this.currentX);
+
+					if (distanceY > swipeOutBounded || distanceX > swipeOutBounded) {
+
+						// Check which swipe direction it is based on the mouse movement
+						if (distanceX > swipeOutBounded) {
+							direction = $this.startX > $this.currentX ? 'left' : 'right';
+						} else {
+							direction = $this.startY > $this.currentY ? 'top' : 'bottom';
+						}
+
+						// Only emit the specified event when it has modifiers
+						if (hasEvent(this, 'swipe.' + direction)) {
+							triggerEvent(event, this, 'swipe.' + direction, direction);
+						} else {
+							// Emit a common event when it has no any modifier
+							triggerEvent(event, this, 'swipe', direction);
+						}
 					}
 				}
 			}
@@ -501,16 +518,17 @@ var vueTouchEvents = {
 				}
 
 				var dragEventObj = $this.options.dragOutside ? window : $el;
+				var dragEventHandler = $this.options.dragOutside ? touchMoveEventWindow : touchMoveEvent;
 
 				$el.addEventListener('touchstart', touchStartEvent, passiveOpt);
-				dragEventObj.addEventListener('touchmove', touchMoveEvent, passiveOpt);
-				$el.addEventListener('touchcancel', touchCancelEvent);
-				$el.addEventListener('touchend', touchEndEvent);
+				dragEventObj.addEventListener('touchmove', dragEventHandler, passiveOpt);
+				dragEventObj.addEventListener('touchcancel', touchCancelEvent);
+				dragEventObj.addEventListener('touchend', touchEndEvent);
 
 				if (!$this.options.disableClick) {
 					$el.addEventListener('mousedown', touchStartEvent);
-					dragEventObj.addEventListener('mousemove', touchMoveEvent);
-					$el.addEventListener('mouseup', touchEndEvent);
+					dragEventObj.addEventListener('mousemove', dragEventHandler);
+					dragEventObj.addEventListener('mouseup', touchEndEvent);
 					$el.addEventListener('mouseenter', mouseEnterEvent);
 					$el.addEventListener('mouseleave', mouseLeaveEvent);
 				}
@@ -525,16 +543,17 @@ var vueTouchEvents = {
 				cancelTouchHoldTimer(touchObj);
 
 				var dragEventObj = touchObj?.options?.dragOutside ? window : $el;
+				var dragEventHandler = touchObj?.options?.dragOutside ? touchMoveEventWindow : touchMoveEvent;
 
 				$el.removeEventListener('touchstart', touchStartEvent);
-				dragEventObj.removeEventListener('touchmove', touchMoveEvent);
-				$el.removeEventListener('touchcancel', touchCancelEvent);
-				$el.removeEventListener('touchend', touchEndEvent);
+				dragEventObj.removeEventListener('touchmove', dragEventHandler);
+				dragEventObj.removeEventListener('touchcancel', touchCancelEvent);
+				dragEventObj.removeEventListener('touchend', touchEndEvent);
 
 				if (touchObj && !touchObj.options.disableClick) {
 					$el.removeEventListener('mousedown', touchStartEvent);
-					dragEventObj.addEventListener('mousemove', touchMoveEvent);
-					$el.removeEventListener('mouseup', touchEndEvent);
+					dragEventObj.addEventListener('mousemove', dragEventHandler);
+					dragEventObj.removeEventListener('mouseup', touchEndEvent);
 					$el.removeEventListener('mouseenter', mouseEnterEvent);
 					$el.removeEventListener('mouseleave', mouseLeaveEvent);
 				}

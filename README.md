@@ -260,7 +260,7 @@ These settings can be optionally specified in the [Global Config](#global-config
 |------------------|--------------|------------------------------------------------------------------------|
 | `tapTolerance`   | pixels       | How many pixels the user must drag on the element for it to register as a `tap` event. **Default:** `10` pixels. |
 | `dragFrequency`  | milliseconds | How often should `drag` events be fired. **Default:** `10` MS (100 times a second). |
-| `dragOutside`    | boolean      | If the `drag` event should be fired when the mouse is dragged outside the object as well. Useful to implement drag-and-drop behaviour when the object being moved is the same element you have added `v-touch` events on. If this is true, rollover events will not fire. **Default:** `false` |
+| `dragOutside`    | boolean      | If the `drag` event should be fired when the mouse is dragged outside the object as well. Useful to implement drag-and-drop behaviour when the object being moved is the same element you have added `v-touch` events on. **Default:** `false` |
 
 
 
@@ -285,6 +285,7 @@ These settings can be optionally specified in the [Global Config](#global-config
 |------------------|--------------|------------------------------------------------------------------------|
 | `swipeTolerance` | pixels     | How many pixels the user must drag on the element for it to register as a `swipe` event. **Default:** `100` pixels. |
 | `swipeConeSize`  | number (0-1) | How wide should the "swipe cone" be. The wider the cone, the more off-axis gestures are considered as swipes. **Default:** `0.75` |
+
 
 ![Cone](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/swipe-cone.png)
 
