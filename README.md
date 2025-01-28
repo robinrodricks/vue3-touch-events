@@ -196,12 +196,10 @@ methods: {
 
 ## Touch and Tap
 
-### Tap Events
-
 These events are provided by this library. Most events work on Desktop & Mobile devices.
 
-| <div style="width:170px">Event</div>     | Behaviour          |
-| ---------------------------------------- | ------------------ |
+| Event &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;     | Behaviour          |
+| ---------------------------------------------------- | ------------------ |
 |  `v-touch`<br> `v-touch:tap` | **Desktop:** Triggered when the user clicks on the element (press and release). <br> **Mobile:** Triggered when the user taps on the element (tap and release)      |
 | `v-touch:longtap` | **Desktop:** Triggered when the user holds on the element for `longTapTimeInterval` MS and then releases it (press and release). <br> **Mobile:** Triggered when the user taps and holds on the element for `longTapTimeInterval` MS and then releases it (tap and release)      |
 | `v-touch:hold`              | Triggered when the user holds the mouse button down for `touchHoldTolerance` MS while over the element (press and hold). <br> This will be triggered before your finger is released, similar to what native mobile apps do.    |
@@ -244,8 +242,6 @@ These are the default interactivity events supported by vue.js 3.x.
 
 ## Drag and Drop
 
-### Drag Events
-
 These drag-and-drop events are provided by this library.
 
 | <div style="width:170px">Event</div>     | Behaviour          |
@@ -267,8 +263,6 @@ These settings can be optionally specified in the [Global Config](#global-config
 
 
 ## Swipe
-
-### Swipe Events
 
 These swiping events are provided by this library.
 
@@ -295,8 +289,6 @@ These settings can be optionally specified in the [Global Config](#global-config
 
 
 ## Zoom
-
-### Zoom Events
 
 These zooming events are provided by this library.
 
