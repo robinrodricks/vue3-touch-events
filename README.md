@@ -84,10 +84,7 @@ export default defineNuxtPlugin((nuxtApp) => {
 Add `v-touch` events to any Nuxt component: (this is sample code only)
 
 ```ts
-<div
-	v-touch:swipe.left="() => swipe('next')"
-	v-touch:swipe.right="() => swipe('prev')"
->
+<div v-touch:swipe.left="() => swipe('next')" v-touch:swipe.right="() => swipe('prev')">
 ```
 
 
