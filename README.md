@@ -272,7 +272,7 @@ These swiping events are provided by this library. **All these work on Desktop &
 | ----------- | -------- | ------------------ |
 | ![Pic](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/events0005.png) | `v-touch:swipe`              | Triggered when the user drags on the element (swipe). <br> It will detect the direction of the swipe and send it to your callback. <br> First argument of the callback must be `direction` attribute, which can be `left`, `right`, `top` or `bottom`. <br> Example callback: `onSwipe(direction){ ... }` |
 | ![Pic](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/events0004.png) | `v-touch:swipe.left` | Triggered when the user drags on the element within the left cone. |
-| ![Pic](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/events0003.png) | `v-touch:swipe.right` | Triggered when the user drags on the element within the left cone. |
+| ![Pic](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/events0003.png) | `v-touch:swipe.right` | Triggered when the user drags on the element within the right cone. |
 | ![Pic](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/events0001.png) | `v-touch:swipe.top` | Triggered when the user drags on the element within the top cone. |
 |![Pic](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/events0002.png) |  `v-touch:swipe.bottom` | Triggered when the user drags on the element within the bottom cone. |
 
