@@ -306,8 +306,6 @@ These settings can be optionally specified in the [Global Config](#global-config
 
 | Setting          | Units        | Comment                                                                |
 |------------------|--------------|------------------------------------------------------------------------|
-| Name                | Units        | Comment                                                                |
-|---------------------|--------------|------------------------------------------------------------------------|
 | `zoomFrequency`     | milliseconds | How often should `zoom` / `zoom.in` / `zoom.out` events be fired. **Default:** `10` MS (100 times a second). |
 | `zoomDistance`      | pixels       | How many pixels should the user move their fingers to trigger a `zoom` event. **Default:** `10` |
 | `zoomInOutDistance` | pixels       | How many pixels should the user move their fingers to trigger a `zoom.in` or `zoom.out` event. **Default:** `100` |
