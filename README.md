@@ -209,11 +209,11 @@ These events are provided by this library. Most events work on Desktop & Mobile 
 
 These settings can be optionally specified in the [Global Config](#global-configuration). If they are not specified, defaults are used.
 
-- `touchHoldTolerance` in milliseconds - The timeout for a `hold` event. **Default:**  `400` MS
-
-- `longTapTimeInterval` in milliseconds - The minimum time interval to detect whether long tap event effective or not.  **Default:**  `400` MS.
-
-- `rollOverFrequency` in milliseconds - How often should `rollover` events be fired.  **Default:**  `100` MS (10 times a second).
+| Setting                | Units        | Comment                                                                 |
+|------------------------|--------------|-------------------------------------------------------------------------|
+| `touchHoldTolerance`    | milliseconds | The timeout for a `hold` event. **Default:** `400` MS                   |
+| `longTapTimeInterval`   | milliseconds | The minimum time interval to detect whether long tap event effective or not. **Default:** `400` MS |
+| `rollOverFrequency`     | milliseconds | How often should `rollover` events be fired. **Default:** `100` MS (10 times a second) |
 
 ### System events
 
@@ -255,9 +255,10 @@ These drag-and-drop events are provided by this library.
 
 These settings can be optionally specified in the [Global Config](#global-configuration). If they are not specified, defaults are used.
 
-- `tapTolerance` in pixels - How many pixels the user must drag on the element for it to register as a `tap` event. **Default:** `10` pixels.
-
-- `dragFrequency` in milliseconds - How often should `drag` events be fired.  **Default:**  `10` MS (100 times a second).
+| Setting          | Units        | Comment                                                                |
+|------------------|--------------|------------------------------------------------------------------------|
+| `tapTolerance`   | pixels       | How many pixels the user must drag on the element for it to register as a `tap` event. **Default:** `10` pixels. |
+| `dragFrequency`  | milliseconds | How often should `drag` events be fired. **Default:** `10` MS (100 times a second). |
 
 
 
@@ -278,9 +279,10 @@ These swiping events are provided by this library.
 
 These settings can be optionally specified in the [Global Config](#global-configuration). If they are not specified, defaults are used.
 
-- `swipeTolerance` in pixels - How many pixels the user must drag on the element for it to register as a `swipe` event. **Default:**  `100` pixels.
-
-- `swipeConeSize` - Number between 0 to 1.  How wide should the "swipe cone" be. The wider the cone, the more off-axis gestures are considered as swipes. The following image illustrates what different values do.
+| Setting          | Units        | Comment                                                                |
+|------------------|--------------|------------------------------------------------------------------------|
+| `swipeTolerance` | pixels     | How many pixels the user must drag on the element for it to register as a `swipe` event. **Default:** `100` pixels. |
+| `swipeConeSize`  | number (0-1) | How wide should the "swipe cone" be. The wider the cone, the more off-axis gestures are considered as swipes. |
 
 ![Cone](https://github.com/robinrodricks/vue3-touch-events/raw/master/images/swipe-cone.png)
 
@@ -304,27 +306,13 @@ These zooming events are provided by this library.
 
 These settings can be optionally specified in the [Global Config](#global-configuration). If they are not specified, defaults are used.
 
-- `zoomFrequency` in milliseconds - How often should `zoom` / `zoom.in` / `zoom.out` events be fired.  **Default:**  `10` MS (100 times a second).
-
-- `zoomDistance` in pixels - How many pixels should the user move their fingers to trigger a `zoom` event.
-
-- `zoomInOutDistance` in pixels - How many pixels should the user move their fingers to trigger a `zoom.in` or `zoom.out` event.
-
-
-
-
-
-## Migration from Vue 2.x
-
-Some events have been renamed from the vue 2.x version of this library, in order to expose a cleaner, more consistant and more descriptive naming scheme.
-
-| Old event name               | New event name      |
-| ---------------------------- | ------------------- |
-| `v-touch:touchhold`          | `v-touch:hold`      |
-| `v-touch:start`              | `v-touch:press`     |
-| `v-touch:end`                | `v-touch:release`   |
-| `v-touch:moved`              | `v-touch:drag.once` |
-| `v-touch:moving`             | `v-touch:drag`      |
+| Setting          | Units        | Comment                                                                |
+|------------------|--------------|------------------------------------------------------------------------|
+| Name                | Units        | Comment                                                                |
+|---------------------|--------------|------------------------------------------------------------------------|
+| `zoomFrequency`     | milliseconds | How often should `zoom` / `zoom.in` / `zoom.out` events be fired. **Default:** `10` MS (100 times a second). |
+| `zoomDistance`      | pixels       | How many pixels should the user move their fingers to trigger a `zoom` event. |
+| `zoomInOutDistance` | pixels       | How many pixels should the user move their fingers to trigger a `zoom.in` or `zoom.out` event. |
 
 
 
@@ -422,6 +410,21 @@ Vue.use(Vue3TouchEvents, {
 
 - `namespace` - Allows you to customize which Vue namespace this plugin uses. The default namespace is `touch` which adds the Vue directives: `touch`, `touch-class` and `touch-options`. Changing it to another value, for example `yolo`, would add the Vue directives: `yolo`, `yolo-class` and `yolo-options`.
 
+
+
+
+
+## Migration from Vue 2.x
+
+Some events have been renamed from the vue 2.x version of this library, in order to expose a cleaner, more consistant and more descriptive naming scheme.
+
+| Old event name               | New event name      |
+| ---------------------------- | ------------------- |
+| `v-touch:touchhold`          | `v-touch:hold`      |
+| `v-touch:start`              | `v-touch:press`     |
+| `v-touch:end`                | `v-touch:release`   |
+| `v-touch:moved`              | `v-touch:drag.once` |
+| `v-touch:moving`             | `v-touch:drag`      |
 
 
 
