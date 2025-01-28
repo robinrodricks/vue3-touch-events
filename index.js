@@ -540,9 +540,9 @@ var vueTouchEvents = {
 				// ADD MOBILE EVENTS
 				if ($this.options.dragOutside) {
 					$this.events['touchstart'] = [$el, touchStartEvent];
-					$this.events['touchmove'] = [window, touchMoveEventWindow.bind(this)];
-					$this.events['touchcancel'] = [window, touchCancelEvent.bind(this)];
-					$this.events['touchend'] = [window, touchEndEvent.bind(this)];
+					$this.events['touchmove'] = [window, touchMoveEventWindow.bind($el)];
+					$this.events['touchcancel'] = [window, touchCancelEvent.bind($el)];
+					$this.events['touchend'] = [window, touchEndEvent.bind($el)];
 				} else {
 					$this.events['touchstart'] = [$el, touchStartEvent];
 					$this.events['touchmove'] = [$el, touchMoveEventWindow];
@@ -554,8 +554,8 @@ var vueTouchEvents = {
 				if (!$this.options.disableClick) {
 					if ($this.options.dragOutside) {
 						$this.events['mousedown'] = [$el, touchStartEvent];
-						$this.events['mousemove'] = [window, touchMoveEventWindow.bind(this)];
-						$this.events['mouseup'] = [window, touchEndEvent.bind(this)];
+						$this.events['mousemove'] = [window, touchMoveEventWindow.bind($el)];
+						$this.events['mouseup'] = [window, touchEndEvent.bind($el)];
 						$this.events['mouseenter'] = [$el, mouseEnterEvent];
 						$this.events['mouseleave'] = [$el, mouseLeaveEvent];
 					} else {
