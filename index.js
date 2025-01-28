@@ -500,7 +500,7 @@ var vueTouchEvents = {
 					return;
 				}
 
-				var dragEventObj = el.$$touchObj.options.dragOutside ? window : $el;
+				var dragEventObj = $this.options.dragOutside ? window : $el;
 
 				$el.addEventListener('touchstart', touchStartEvent, passiveOpt);
 				dragEventObj.addEventListener('touchmove', touchMoveEvent, passiveOpt);
@@ -520,16 +520,18 @@ var vueTouchEvents = {
 			},
 
 			unmounted: function ($el) {
-				cancelTouchHoldTimer($el.$$touchObj);
+				var touchObj = $el.$$touchObj;
 
-				var dragEventObj = el.$$touchObj.options.dragOutside ? window : $el;
+				cancelTouchHoldTimer(touchObj);
+
+				var dragEventObj = touchObj?.options?.dragOutside ? window : $el;
 
 				$el.removeEventListener('touchstart', touchStartEvent);
 				dragEventObj.removeEventListener('touchmove', touchMoveEvent);
 				$el.removeEventListener('touchcancel', touchCancelEvent);
 				$el.removeEventListener('touchend', touchEndEvent);
 
-				if ($el.$$touchObj && !$el.$$touchObj.options.disableClick) {
+				if (touchObj && !touchObj.options.disableClick) {
 					$el.removeEventListener('mousedown', touchStartEvent);
 					dragEventObj.addEventListener('mousemove', touchMoveEvent);
 					$el.removeEventListener('mouseup', touchEndEvent);
