@@ -1,0 +1,22 @@
+{
+	// We are only using TSC (typescript compiler) to create the `index.d.ts` file.
+	// The main build JS `index.js` is built using bun.
+	"compilerOptions": {
+		"declaration": true, // tell tsc to generate .d.ts files
+		"declarationDir": "./dist", // output .d.ts files in the dist folder
+		"outDir": "./dist", // output compiled JS files in dist
+		"target": "es2016", // specify JS target
+		"module": "ESNext", // use ESNext module system
+		"moduleResolution": "node", // resolve modules like Node
+		"strict": false, // enable all strict type-checking options
+		"esModuleInterop": true, // ensure compatibility with CommonJS
+		"skipLibCheck": true, // skip type checking of all declaration files
+		"allowJs": false // allow JS files to be included
+	},
+	"include": [
+		"src/index.ts",
+	],
+	"exclude": [
+		"node_modules"
+	]
+}

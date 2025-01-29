@@ -5,37 +5,101 @@
  * @url       https://github.com/robinrodricks/vue3-touch-events
  */
 
-function touchX(event) {
-	if (event.type.indexOf('mouse') !== -1) {
-		return event.clientX;
-	}
-	return event.touches?.[0]?.clientX ?? 0;
+// Types for Vue and DOM events
+import { App, Plugin, Directive, DirectiveBinding } from 'vue'
+
+// Interface for touch event options
+export interface Vue3TouchEventsOptions {
+
+	// CORE
+	touchClass?: string,
+	namespace?: string,
+
+	// CLICK/TAP
+	disableClick?: boolean,
+	tapTolerance?: number,
+	touchHoldTolerance?: number,
+	longTapTimeInterval?: number,
+	rollOverFrequency?: number,
+
+	// DRAG
+	dragFrequency?: number,
+	dragOutside?: boolean,
+
+	// SWIPE
+	swipeTolerance?: number,
+	swipeConeSize?: number,
+
+	// ZOOM
+	zoomFrequency?: number,
+	zoomDistance?: number,
+	zoomInOutDistance?: number,
 }
 
-function touchY(event) {
-	if (event.type.indexOf('mouse') !== -1) {
-		return event.clientY;
-	}
-	return event.touches?.[0]?.clientY ?? 0;
+// Interface for touch object internal state
+interface TouchObject {
+	element: HTMLElement
+	callbacks: { [key: string]: DirectiveBinding[] }
+	hasBindTouchEvents: boolean
+	options: Vue3TouchEventsOptions
+	events: { [key: string]: [EventTarget, EventListener] }
+	touchStarted?: boolean
+	touchMoved?: boolean
+	swipeOutBounded?: boolean
+	isZooming?: boolean
+	startX?: number
+	startY?: number
+	currentX?: number
+	currentY?: number
+	touchStartTime?: number
+	lastTouchStartTime?: number
+	lastTouchEndTime?: number
+	touchHoldTimer?: ReturnType<typeof setTimeout> | null
+	touchRollTime?: number
+	touchDragTime?: number
+	touchZoomTime?: number
+	initialZoomDistance?: number
+	hasSwipe?: boolean
+	hasZoom?: boolean
 }
 
-var isPassiveSupported = (function () {
-	var supportsPassive = false;
+// Helper function to get X coordinate from touch/mouse event
+function touchX(event: MouseEvent | TouchEvent): number {
+	if (event.type.indexOf('mouse') !== -1) {
+		return (event as MouseEvent).clientX;
+	}
+	return (event as TouchEvent).touches?.[0]?.clientX ?? 0;
+}
+
+// Helper function to get Y coordinate from touch/mouse event
+function touchY(event: MouseEvent | TouchEvent): number {
+	if (event.type.indexOf('mouse') !== -1) {
+		return (event as MouseEvent).clientY;
+	}
+	return (event as TouchEvent).touches?.[0]?.clientY ?? 0;
+}
+
+// Check for passive event listener support
+const isPassiveSupported = (function (): boolean {
+	let supportsPassive = false;
 	try {
-		var opts = Object.defineProperty({}, 'passive', {
+		const opts = Object.defineProperty({}, 'passive', {
 			get: function () {
 				supportsPassive = true;
+				return true;
 			}
 		});
-		window.addEventListener('test', null, opts);
+		window.addEventListener('test', null as any, opts);
 	} catch (e) { }
 	return supportsPassive;
 })();
 
-var vueTouchEvents = {
-	install: function (app, constructorOptions) {
+// Main Vue Touch Events plugin
+const Vue3TouchEvents: Plugin<Partial<Vue3TouchEventsOptions>> = {
+	install(app: App, constructorOptions?: Partial<Vue3TouchEventsOptions>) {
 
-		var globalOptions = Object.assign({}, {
+		// Default global options merged with constructor options
+		var globalOptions: Vue3TouchEventsOptions = Object.assign({}, {
 
 			// CORE
 			touchClass: '',
@@ -67,7 +131,7 @@ var vueTouchEvents = {
 		}, constructorOptions);
 
 		/** Fired when the user performs a MOUSE DOWN on the object */
-		function touchStartEvent(event) {
+		function touchStartEvent(event: MouseEvent | TouchEvent) {
 			var $this = this.$$touchObj,
 				isTouchEvent = event.type.indexOf('touch') >= 0,
 				isMouseEvent = event.type.indexOf('mouse') >= 0,
@@ -125,7 +189,7 @@ var vueTouchEvents = {
 		/** 
 		Fired when the user MOVES the mouse over the window.
 		*/
-		function touchMoveEventWindow(event) {
+		function touchMoveEventWindow(event: MouseEvent | TouchEvent) {
 
 			// only process if pressed
 			var $this = this.$$touchObj;
@@ -139,9 +203,9 @@ var vueTouchEvents = {
 		/** 
 		Fired when the user DRAGS the object or MOVES the mouse over the object.
 		*/
-		function touchMoveEvent(event, $this = null) {
+		function touchMoveEvent(event: MouseEvent | TouchEvent, $this: TouchObject = null) {
 
-			if ($this == null) $this = this.$$touchObj;
+			if ($this == null) $this = this.$$touchObj as TouchObject;
 
 			var curX = touchX(event);
 			var curY = touchY(event);
@@ -311,7 +375,7 @@ var vueTouchEvents = {
 		}
 
 		/** Fired when the user performs a MOUSE UP on the object (releases the mouse button or finger press) */
-		function touchEndEvent(event) {
+		function touchEndEvent(event: MouseEvent | TouchEvent) {
 			var $this = this.$$touchObj;
 			if ($this.touchStarted == true) {
 
@@ -404,13 +468,13 @@ var vueTouchEvents = {
 			removeTouchClass(this);
 		}
 
-		function hasEvent($this, eventType) {
+		function hasEvent($this: TouchObject, eventType: string): boolean {
 			var callbacks = $this.callbacks[eventType];
 			return (callbacks != null && callbacks.length > 0);
 		}
 
-		function triggerEvent(e, $el, eventType, param) {
-			var $this = $el.$$touchObj;
+		function triggerEvent(e: Event, $el: HTMLElement, eventType: string, param?: any) {
+			var $this = $el.$$touchObj as TouchObject;
 
 			// get the subscribers for this event
 			var callbacks = $this.callbacks[eventType];
@@ -447,13 +511,13 @@ var vueTouchEvents = {
 			}
 		}
 
-		function addTouchClass($el) {
-			var className = $el.$$touchObj.options.touchClass;
+		function addTouchClass($el: HTMLElement) {
+			var className = ($el.$$touchObj as TouchObject).options.touchClass;
 			className && $el.classList.add(className);
 		}
 
-		function removeTouchClass($el) {
-			var className = $el.$$touchObj.options.touchClass;
+		function removeTouchClass($el: HTMLElement) {
+			var className = ($el.$$touchObj as TouchObject).options.touchClass;
 			className && $el.classList.remove(className);
 		}
 
@@ -464,8 +528,8 @@ var vueTouchEvents = {
 			}
 		}
 
-		function buildTouchObj($el, extraOptions) {
-			var touchObj = $el.$$touchObj || {
+		function buildTouchObj($el: HTMLElement, extraOptions: any) {
+			var touchObj = ($el.$$touchObj as TouchObject) || {
 				element: $el,
 				// an object contains all callbacks registered,
 				// key is event name, value is an array
@@ -483,7 +547,7 @@ var vueTouchEvents = {
 			return $el.$$touchObj;
 		}
 
-		function addEvents(events) {
+		function addEvents(events: any) {
 			for (const eventName in events) {
 				if (events.hasOwnProperty(eventName)) {
 					const [target, handler] = events[eventName];
@@ -492,7 +556,7 @@ var vueTouchEvents = {
 			}
 		}
 
-		function removeEvents(events) {
+		function removeEvents(events: any) {
 			for (const eventName in events) {
 				if (events.hasOwnProperty(eventName)) {
 					const [target, handler] = events[eventName];
@@ -502,7 +566,7 @@ var vueTouchEvents = {
 		}
 
 		app.directive(globalOptions.namespace, {
-			beforeMount: function ($el, binding) {
+			beforeMount: function ($el: HTMLElement, binding: DirectiveBinding) {
 				// build a touch configuration object
 				var $this = buildTouchObj($el);
 				// declare passive option for the event listener. Defaults to { passive: true } if supported
@@ -579,7 +643,7 @@ var vueTouchEvents = {
 				$this.hasBindTouchEvents = true;
 			},
 
-			unmounted: function ($el) {
+			unmounted: function ($el: HTMLElement) {
 				var touchObj = $el.$$touchObj;
 
 				cancelTouchHoldTimer(touchObj);
@@ -595,6 +659,8 @@ var vueTouchEvents = {
 			}
 		});
 
+
+		// Register additional directives for class
 		app.directive(`${globalOptions.namespace}-class`, {
 			beforeMount: function ($el, binding) {
 				buildTouchObj($el, {
@@ -603,6 +669,7 @@ var vueTouchEvents = {
 			}
 		});
 
+		// Register additional directives for options
 		app.directive(`${globalOptions.namespace}-options`, {
 			beforeMount: function ($el, binding) {
 				buildTouchObj($el, binding.value);
@@ -614,4 +681,4 @@ var vueTouchEvents = {
 /*
  * Exports
  */
-export default vueTouchEvents
+export default Vue3TouchEvents

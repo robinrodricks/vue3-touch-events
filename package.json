@@ -1,17 +1,17 @@
 {
 	"name": "vue3-touch-events",
-	"version": "5.0.10",
+	"version": "5.0.11",
 	"description": "Simple touch events support for vue.js 3",
 	"type": "module",
 	"main": "dist/index.js",
 	"module": "dist/index.js",
-	"types": "index.d.ts",
+	"types": "dist/index.d.ts",
 	"files": [
 		"dist"
 	],
 	"scripts": {
-		"build": "bun build ./index.js --outdir ./dist",
-		"dev": "bun build ./index.js --outdir ./dist --watch",
+		"build": "bun build ./src/index.ts --outdir ./dist && bunx tsc",
+		"dev": "bun build ./src/index.ts --outdir ./dist --watch & bunx tsc --watch",
 		"test": "bun test"
 	},
 	"repository": {
@@ -25,14 +25,15 @@
 		"swipe",
 		"longtap"
 	],
-	"author": "Robin Rodricks, Xavier Julien, Jerry Bendy",
+	"author": "Robin Rodricks",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/robinrodricks/vue3-touch-events/issues"
 	},
 	"homepage": "https://github.com/robinrodricks/vue3-touch-events#readme",
 	"devDependencies": {
-		"bun-types": "latest"
+		"bun-types": "latest",
+		"typescript": "^5.7.3"
 	},
 	"peerDependencies": {
 		"vue": "^3.0.0"
