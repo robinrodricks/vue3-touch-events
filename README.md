@@ -428,6 +428,16 @@ Some events have been renamed from the vue 2.x version of this library, in order
 
 
 
+## Building from Source
+
+1. First install `bun` on your system. Node is not required.
+2. Run these commands:
+
+```
+bun install
+bun run build
+```
+
 ## Credits
 
 - Credits go to Jerry Bendy for creating the original project [vue2-touch-events](https://github.com/jerrybendy/vue-touch-events)

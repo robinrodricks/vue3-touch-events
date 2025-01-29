@@ -1,3 +1,9 @@
+### Version 5.0.11
+
+- Converted the main source file from JavaScript into TypeScript
+- Fixed issue with Vue not recognizing the TS type definitions
+- Added TSC into the build toolchain to build the `index.d.ts` type definition file
+
 ### Version 5.0.10
 
 - Rewrote the event handling system to track events on a per-object basis.
