@@ -616,7 +616,7 @@ const Vue3TouchEvents: Plugin<Partial<Vue3TouchEventsOptions>> = {
 					$this.events['touchstart'] = [$el, touchStartEvent];
 					$this.events['touchmove'] = [$el, touchMoveEventWindow];
 					$this.events['touchcancel'] = [$el, touchCancelEvent];
-					$this.events['touchend'] = [$el, touchEndEvent.bind];
+					$this.events['touchend'] = [$el, touchEndEvent];
 				}
 
 				// ADD DESKTOP EVENTS
