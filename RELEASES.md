@@ -1,3 +1,11 @@
+### Version 5.0.13
+
+- Fix issue where `rollover` events were not working if `dragOutside` was enabled
+
+### Version 5.0.12
+
+- Fix issue where swipe events were not working on mobile devices
+
 ### Version 5.0.11
 
 - Converted the main source file from JavaScript into TypeScript

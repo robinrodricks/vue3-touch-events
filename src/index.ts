@@ -192,18 +192,35 @@ const Vue3TouchEvents: Plugin<Partial<Vue3TouchEventsOptions>> = {
 		function touchMoveEventWindow(event: MouseEvent | TouchEvent) {
 
 			// only process if pressed
-			var $this = this.$$touchObj;
+			var $this = this.$$touchObj as TouchObject;
 			if ($this.touchStarted == true) {
 
 				// process event and pass 'this' onward
-				touchMoveEvent(event, $this);
+				touchMoveEvent(event, $this, false);
+
+			} else {
+
+				// TODO: mobile support
+				// if rollover events are wanted and this is a mouse event
+				if (hasEvent($this, 'rollover') && event.clientX != null) {
+					var mouseEvent: MouseEvent = event as MouseEvent;
+
+					// if the mouse is actually over this object (within this obj's bounds)
+					const rect = $this.element.getBoundingClientRect();
+					if (mouseEvent.clientX >= rect.left && mouseEvent.clientX <= rect.right &&
+						mouseEvent.clientY >= rect.top && mouseEvent.clientY <= rect.bottom) {
+
+						// process rollovers only and pass 'this' onward
+						touchMoveEvent(event, $this, true);
+					}
+				}
 			}
 		}
 
 		/** 
 		Fired when the user DRAGS the object or MOVES the mouse over the object.
 		*/
-		function touchMoveEvent(event: MouseEvent | TouchEvent, $this: TouchObject = null) {
+		function touchMoveEvent(event: MouseEvent | TouchEvent, $this: TouchObject = null, onlyProcessRollover: boolean = false) {
 
 			if ($this == null) $this = this.$$touchObj as TouchObject;
 
@@ -215,36 +232,39 @@ const Vue3TouchEvents: Plugin<Partial<Vue3TouchEventsOptions>> = {
 			$this.currentX = curX;
 			$this.currentY = curY;
 
+			// dont process if only rollover wanted!
+			if (!onlyProcessRollover) {
 
-			//--------------------------------------------------------------------------------------
-			//									DRAG ONCE
-			//--------------------------------------------------------------------------------------
-			if (!$this.touchMoved) {
-				var tapTolerance = $this.options.tapTolerance;
+				//--------------------------------------------------------------------------------------
+				//									DRAG ONCE
+				//--------------------------------------------------------------------------------------
+				if (!$this.touchMoved) {
+					var tapTolerance = $this.options.tapTolerance;
 
-				$this.touchMoved = Math.abs($this.startX - $this.currentX) > tapTolerance ||
-					Math.abs($this.startY - $this.currentY) > tapTolerance;
+					$this.touchMoved = Math.abs($this.startX - $this.currentX) > tapTolerance ||
+						Math.abs($this.startY - $this.currentY) > tapTolerance;
 
-				// trigger `drag.once` only once after mouse FIRST moved while dragging the element
-				// (`touchMoved` is the flag that indicates we no longer need to trigger this)
-				if ($this.touchMoved) {
-					cancelTouchHoldTimer($this);
-					triggerEvent(event, $this.element, 'drag.once');
+					// trigger `drag.once` only once after mouse FIRST moved while dragging the element
+					// (`touchMoved` is the flag that indicates we no longer need to trigger this)
+					if ($this.touchMoved) {
+						cancelTouchHoldTimer($this);
+						triggerEvent(event, $this.element, 'drag.once');
+					}
+
 				}
 
-			}
+				//--------------------------------------------------------------------------------------
+				//										SWIPE
+				//--------------------------------------------------------------------------------------
+				// performance: only process swipe events if `swipe.*` event is registered on this element
+				else if ($this.hasSwipe && !$this.swipeOutBounded) {
+					var swipeOutBounded = $this.options.swipeTolerance;
 
-			//--------------------------------------------------------------------------------------
-			//										SWIPE
-			//--------------------------------------------------------------------------------------
-			// performance: only process swipe events if `swipe.*` event is registered on this element
-			else if ($this.hasSwipe && !$this.swipeOutBounded) {
-				var swipeOutBounded = $this.options.swipeTolerance;
-
-				// Process swipe events using cones
-				if (Math.abs($this.startX - $this.currentX) / Math.abs($this.startY - $this.currentY) > $this.options.swipeConeSize &&
-					Math.abs($this.startY - $this.currentY) / Math.abs($this.startX - $this.currentX) > $this.options.swipeConeSize) {
-					$this.swipeOutBounded = (Math.abs($this.startY - $this.currentY) < swipeOutBounded) && (Math.abs($this.startX - $this.currentX) < swipeOutBounded)
+					// Process swipe events using cones
+					if (Math.abs($this.startX - $this.currentX) / Math.abs($this.startY - $this.currentY) > $this.options.swipeConeSize &&
+						Math.abs($this.startY - $this.currentY) / Math.abs($this.startX - $this.currentX) > $this.options.swipeConeSize) {
+						$this.swipeOutBounded = (Math.abs($this.startY - $this.currentY) < swipeOutBounded) && (Math.abs($this.startX - $this.currentX) < swipeOutBounded)
+					}
 				}
 			}
 
@@ -261,6 +281,11 @@ const Vue3TouchEvents: Plugin<Partial<Vue3TouchEventsOptions>> = {
 
 					triggerEvent(event, $this.element, 'rollover');
 				}
+			}
+
+			// exit if only rollovers wanted!
+			if (onlyProcessRollover) {
+				return;
 			}
 
 			//--------------------------------------------------------------------------------------
