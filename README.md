@@ -220,6 +220,14 @@ These settings can be optionally specified in the [Global Config](#global-config
 | `longTapTimeInterval`   | milliseconds | The minimum time interval to detect whether long tap event effective or not. **Default:** `400` MS |
 | `rollOverFrequency`     | milliseconds | How often should `rollover` events be fired. **Default:** `100` MS (10 times a second) |
 
+### My rollover events are laggy and stuttering!
+
+This is because the library only sends 10 rollover events per second by default, which can appear laggy.
+
+To increase the frequency of rollover events, and prevent any stuttering, set the `rollOverFrequency` to `10` (for 100 FPS) or `16` (for 60 FPS).
+
+You need to add this into the [Global Config](#global-configuration) or [Object Config](#v-touch-options).
+
 ### System events
 
 These are the default interactivity events supported by vue.js 3.x.
@@ -267,6 +275,14 @@ These settings can be optionally specified in the [Global Config](#global-config
 | `tapTolerance`   | pixels       | How many pixels the user must drag on the element for it to register as a `tap` event. **Default:** `10` pixels. |
 | `dragFrequency`  | milliseconds | How often should `drag` events be fired. **Default:** `10` MS (100 times a second). |
 | `dragOutside`    | boolean      | If the `drag` event should be fired when the mouse is dragged outside the object as well. Useful to implement drag-and-drop behaviour when the object being moved is the same element you have added `v-touch` events on. **Default:** `false` |
+
+### My drag events are laggy and stuttering!
+
+This is because the library only sends 10 drag events per second by default, which can appear laggy.
+
+To increase the frequency of drag events, and prevent any stuttering, set the `dragFrequency` to `10` (for 100 FPS) or `16` (for 60 FPS).
+
+You need to add this into the [Global Config](#global-configuration) or [Object Config](#v-touch-options).
 
 
 
