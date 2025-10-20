@@ -322,8 +322,9 @@ const Vue3TouchEvents: Plugin<Partial<Vue3TouchEventsOptions>> = {
 		function checkZoom($this, event) {
 
 
-			// get the list of changed touches from the event
-			const touches = event.changedTouches;
+			// get the list of changed touches from the event (default to empty array for non-touch devices)
+			// without the fallback, `event.changedTouches` is undefined on desktop, causing error when checking length.
+			const touches = event.changedTouches || [];
 
 			// check if exactly two fingers are being used
 			if (touches.length !== 2) {
