@@ -575,8 +575,14 @@ const Vue3TouchEvents: Plugin<Partial<Vue3TouchEventsOptions>> = {
 		function addEvents(events: any) {
 			for (const eventName in events) {
 				if (events.hasOwnProperty(eventName)) {
-					const [target, handler] = events[eventName];
-					target.addEventListener(eventName, handler);
+					const [target, handler, passive] = events[eventName];
+
+					// fix: Added non-passive event listener to a scroll-blocking event
+					if (passive == true) {
+						target.addEventListener(eventName, handler, { passive: true });
+					} else {
+						target.addEventListener(eventName, handler);
+					}
 				}
 			}
 		}
@@ -633,13 +639,13 @@ const Vue3TouchEvents: Plugin<Partial<Vue3TouchEventsOptions>> = {
 
 				// ADD MOBILE EVENTS
 				if ($this.options.dragOutside) {
-					$this.events['touchstart'] = [$el, touchStartEvent];
-					$this.events['touchmove'] = [window, touchMoveEventWindow.bind($el)];
+					$this.events['touchstart'] = [$el, touchStartEvent, true];
+					$this.events['touchmove'] = [window, touchMoveEventWindow.bind($el), true];
 					$this.events['touchcancel'] = [window, touchCancelEvent.bind($el)];
 					$this.events['touchend'] = [window, touchEndEvent.bind($el)];
 				} else {
-					$this.events['touchstart'] = [$el, touchStartEvent];
-					$this.events['touchmove'] = [$el, touchMoveEventWindow];
+					$this.events['touchstart'] = [$el, touchStartEvent, true];
+					$this.events['touchmove'] = [$el, touchMoveEventWindow, true];
 					$this.events['touchcancel'] = [$el, touchCancelEvent];
 					$this.events['touchend'] = [$el, touchEndEvent];
 				}

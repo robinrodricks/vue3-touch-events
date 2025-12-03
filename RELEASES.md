@@ -1,3 +1,8 @@
+### Version 5.0.14
+
+- Use passive events for `touchstart` and `touchmove` to increase performance in browsers
+- Prevent error "Added non-passive event listener to a scroll-blocking event" in web browsers
+
 ### Version 5.0.13
 
 - Fix issue where `rollover` events were not working if `dragOutside` was enabled
