@@ -1,3 +1,7 @@
+### Version 5.0.15
+
+- Fix: Handle undefined `changedTouches` for non-touch devices like desktop/laptop
+
 ### Version 5.0.14
 
 - Use passive events for `touchstart` and `touchmove` to increase performance in browsers
