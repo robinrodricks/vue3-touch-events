@@ -79,21 +79,6 @@ function touchY(event: MouseEvent | TouchEvent): number {
 	return (event as TouchEvent).touches?.[0]?.clientY ?? 0;
 }
 
-// Check for passive event listener support
-const isPassiveSupported = (function (): boolean {
-	let supportsPassive = false;
-	try {
-		const opts = Object.defineProperty({}, 'passive', {
-			get: function () {
-				supportsPassive = true;
-				return true;
-			}
-		});
-		window.addEventListener('test', null as any, opts);
-	} catch (e) { }
-	return supportsPassive;
-})();
-
 // Main Vue Touch Events plugin
 const Vue3TouchEvents: Plugin<Partial<Vue3TouchEventsOptions>> = {
 	install(app: App, constructorOptions?: Partial<Vue3TouchEventsOptions>) {
@@ -601,8 +586,6 @@ const Vue3TouchEvents: Plugin<Partial<Vue3TouchEventsOptions>> = {
 			beforeMount: function ($el: HTMLElement, binding: DirectiveBinding) {
 				// build a touch configuration object
 				var $this = buildTouchObj($el);
-				// declare passive option for the event listener. Defaults to { passive: true } if supported
-				var passiveOpt = isPassiveSupported ? { passive: true } : false;
 				// register callback
 				var eventType = binding.arg || 'tap';
 				switch (eventType) {
@@ -624,10 +607,6 @@ const Vue3TouchEvents: Plugin<Partial<Vue3TouchEventsOptions>> = {
 
 					case 'press':
 					case 'drag':
-						if (binding.modifiers.disablePassive) {
-							// change the passive option for the `drag` event if disablePassive modifier exists
-							passiveOpt = false;
-						}
 					default:
 						$this.callbacks[eventType] = $this.callbacks[eventType] || [];
 						$this.callbacks[eventType].push(binding);
